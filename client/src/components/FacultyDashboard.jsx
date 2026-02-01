@@ -22,6 +22,8 @@ const FacultyDashboard = () => {
         }
     };
 
+    const filterOptions = ['all', 'pending', 'in-progress', 'resolved', 'rejected'];
+
     const filteredComplaints = complaints.filter(c => {
         if (filter === 'all') return true;
         return c.status.toLowerCase().replace(' ', '-') === filter;
@@ -29,30 +31,50 @@ const FacultyDashboard = () => {
 
     const pendingCount = complaints.filter(c => c.status === 'Pending').length;
     const inProgressCount = complaints.filter(c => c.status === 'In Progress').length;
+    const resolvedCount = complaints.filter(c => c.status === 'Resolved').length;
 
     return (
         <div className="dashboard-content">
-            <div className="dashboard-header">
-                <div className="header-left">
-                    <h2>Department Complaints</h2>
-                </div>
-                <div className="quick-stats">
-                    <div className="stat pending">
+            <header className="dash-header">
+                <h1>Department Complaints</h1>
+            </header>
+
+            <div className="stats-grid">
+                <div className="stat-card">
+                    <div className="stat-icon pending">⏳</div>
+                    <div className="stat-info">
                         <span className="stat-value">{pendingCount}</span>
                         <span className="stat-label">Pending</span>
                     </div>
-                    <div className="stat progress">
+                </div>
+                <div className="stat-card">
+                    <div className="stat-icon progress">🔄</div>
+                    <div className="stat-info">
                         <span className="stat-value">{inProgressCount}</span>
                         <span className="stat-label">In Progress</span>
                     </div>
                 </div>
+                <div className="stat-card">
+                    <div className="stat-icon resolved">✅</div>
+                    <div className="stat-info">
+                        <span className="stat-value">{resolvedCount}</span>
+                        <span className="stat-label">Resolved</span>
+                    </div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-icon total">📊</div>
+                    <div className="stat-info">
+                        <span className="stat-value">{complaints.length}</span>
+                        <span className="stat-label">Total</span>
+                    </div>
+                </div>
             </div>
 
-            <div className="filter-bar">
-                {['all', 'pending', 'in-progress', 'resolved', 'rejected'].map(status => (
+            <div className="filter-tabs">
+                {filterOptions.map(status => (
                     <button
                         key={status}
-                        className={`filter-btn ${filter === status ? 'active' : ''}`}
+                        className={`filter-tab ${filter === status ? 'active' : ''}`}
                         onClick={() => setFilter(status)}
                     >
                         {status === 'all' ? 'All' : status.replace('-', ' ')}
@@ -60,14 +82,17 @@ const FacultyDashboard = () => {
                 ))}
             </div>
 
-            <div className="complaints-list">
+            <div className="complaints-grid">
                 {loading ? (
-                    <div className="empty-state">Loading complaints...</div>
+                    <div className="empty-state">
+                        <div className="loading-spinner"></div>
+                        <p>Loading complaints...</p>
+                    </div>
                 ) : filteredComplaints.length === 0 ? (
                     <div className="empty-state">
-                        <div className="empty-icon">📋</div>
-                        <h3>No complaints found</h3>
-                        <p>All caught up!</p>
+                        <div className="empty-icon">✨</div>
+                        <h2>All caught up!</h2>
+                        <p>No complaints in this category</p>
                     </div>
                 ) : (
                     filteredComplaints.map(complaint => (
@@ -78,111 +103,182 @@ const FacultyDashboard = () => {
 
             <style>{`
                 .dashboard-content {
-                    padding: 1.5rem 0;
+                    padding: 48px 0;
                 }
 
-                .dashboard-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 1.5rem;
-                    flex-wrap: wrap;
-                    gap: 1rem;
+                .dash-header {
+                    margin-bottom: 40px;
                 }
 
-                .header-left h2 {
+                .dash-header h1 {
                     margin: 0;
-                    font-size: 1.5rem;
-                    color: var(--color-text-primary);
+                    font-size: 36px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                    letter-spacing: -0.02em;
                 }
 
-                .quick-stats {
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 24px;
+                    margin-bottom: 40px;
+                }
+
+                .stat-card {
+                    background: var(--bg-card);
+                    border: 2px solid var(--border-color);
+                    border-radius: var(--radius-xl);
+                    padding: 28px;
                     display: flex;
-                    gap: 1rem;
+                    align-items: center;
+                    gap: 20px;
+                    transition: all 0.3s ease;
                 }
 
-                .stat {
+                .stat-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: var(--shadow-card);
+                }
+
+                .stat-icon {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: var(--radius-lg);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 28px;
+                }
+
+                .stat-icon.pending { background: #fef3c7; }
+                .stat-icon.progress { background: #dbeafe; }
+                .stat-icon.resolved { background: var(--mint-light); }
+                .stat-icon.total { background: var(--bg-elevated); }
+
+                .stat-info {
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
-                    padding: 0.75rem 1.25rem;
-                    background: var(--color-bg-primary);
-                    border-radius: var(--radius-md);
-                    border: 1px solid var(--color-border);
                 }
 
                 .stat-value {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                }
-
-                .stat.pending .stat-value {
-                    color: #f59e0b;
-                }
-
-                .stat.progress .stat-value {
-                    color: #3b82f6;
+                    font-size: 36px;
+                    font-weight: 800;
+                    color: var(--text-main);
+                    line-height: 1;
                 }
 
                 .stat-label {
-                    font-size: 0.75rem;
-                    color: var(--color-text-muted);
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: var(--text-muted);
                     text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                    margin-top: 4px;
                 }
 
-                .filter-bar {
+                .filter-tabs {
                     display: flex;
-                    gap: 0.5rem;
-                    margin-bottom: 1.5rem;
-                    overflow-x: auto;
-                    padding-bottom: 0.5rem;
+                    gap: 12px;
+                    margin-bottom: 36px;
+                    padding: 8px;
+                    background: var(--bg-elevated);
+                    border-radius: var(--radius-lg);
+                    width: fit-content;
                 }
 
-                .filter-btn {
-                    background: var(--color-bg-primary);
-                    border: 1px solid var(--color-border);
-                    padding: 0.5rem 1rem;
-                    border-radius: var(--radius-full);
-                    font-size: 0.875rem;
+                .filter-tab {
+                    background: transparent;
+                    border: none;
+                    padding: 14px 24px;
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: var(--text-muted);
                     cursor: pointer;
-                    white-space: nowrap;
+                    border-radius: var(--radius-md);
                     text-transform: capitalize;
-                    color: var(--color-text-secondary);
-                    transition: all var(--transition-fast);
+                    transition: all 0.2s ease;
+                    font-family: var(--font-main);
                 }
 
-                .filter-btn:hover {
-                    border-color: var(--color-primary);
-                    color: var(--color-primary);
+                .filter-tab:hover {
+                    color: var(--text-main);
+                    background: var(--bg-card);
                 }
 
-                .filter-btn.active {
-                    background: var(--color-primary);
-                    border-color: var(--color-primary);
+                .filter-tab.active {
+                    background: var(--navy);
                     color: white;
+                    box-shadow: var(--shadow-sm);
                 }
 
                 .empty-state {
                     text-align: center;
-                    padding: 3rem;
-                    background: var(--color-bg-primary);
-                    border-radius: var(--radius-lg);
-                    border: 1px solid var(--color-border);
+                    padding: 80px 40px;
+                    background: var(--bg-card);
+                    border: 2px solid var(--border-color);
+                    border-radius: var(--radius-xl);
+                }
+
+                .loading-spinner {
+                    width: 48px;
+                    height: 48px;
+                    border: 4px solid var(--border-color);
+                    border-top-color: var(--accent);
+                    border-radius: 50%;
+                    animation: spin 0.8s linear infinite;
+                    margin: 0 auto 24px;
+                }
+
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
                 }
 
                 .empty-icon {
-                    font-size: 3rem;
-                    margin-bottom: 1rem;
+                    font-size: 72px;
+                    margin-bottom: 24px;
                 }
 
-                .empty-state h3 {
-                    margin: 0 0 0.5rem 0;
-                    color: var(--color-text-primary);
+                .empty-state h2 {
+                    margin: 0 0 12px 0;
+                    font-size: 28px;
+                    font-weight: 700;
+                    color: var(--text-main);
                 }
 
                 .empty-state p {
                     margin: 0;
-                    color: var(--color-text-muted);
+                    font-size: 18px;
+                    color: var(--text-secondary);
+                }
+
+                @media (max-width: 1024px) {
+                    .stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 640px) {
+                    .stats-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 16px;
+                    }
+
+                    .stat-card {
+                        flex-direction: column;
+                        text-align: center;
+                        padding: 24px 16px;
+                    }
+
+                    .stat-icon {
+                        width: 56px;
+                        height: 56px;
+                        font-size: 24px;
+                    }
+
+                    .stat-value {
+                        font-size: 28px;
+                    }
                 }
             `}</style>
         </div>

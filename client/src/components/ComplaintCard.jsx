@@ -29,6 +29,7 @@ const formatDate = (date) => {
 };
 
 const getDaysRemaining = (dueDate) => {
+    if (!dueDate) return null;
     const now = new Date();
     const due = new Date(dueDate);
     const diff = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
@@ -46,154 +47,180 @@ const ComplaintCard = ({ complaint }) => {
     const daysRemaining = getDaysRemaining(complaint.dueDate);
 
     return (
-        <div className="complaint-card card animate-fade-in">
+        <article className="complaint-card animate-fade-in">
             <div className="card-header">
-                <div className="card-title-row">
-                    <h3 className="card-title">
-                        {complaint.isAnonymous && <span className="anonymous-badge">🎭</span>}
-                        {complaint.title}
-                    </h3>
-                    <span className={`badge ${getStatusClass(complaint.status)}`}>
-                        {complaint.status}
-                    </span>
-                </div>
-                <div className="card-meta">
-                    <span className={`badge ${getPriorityClass(complaint.priority)}`}>
-                        {complaint.priority}
-                    </span>
-                    <span className="category-tag">{complaint.category}</span>
-                    <span className="date-tag">📅 {formatDate(complaint.createdAt)}</span>
-                </div>
+                <span className="card-category">{complaint.category}</span>
+                <span className={`badge ${getStatusClass(complaint.status)}`}>
+                    {complaint.status}
+                </span>
             </div>
 
-            <p className="card-description">{complaint.description.substring(0, 150)}...</p>
+            <h3 className="card-title">
+                {complaint.isAnonymous && <span className="anon-icon">🎭</span>}
+                {complaint.title}
+            </h3>
+
+            <p className="card-desc">{complaint.description.substring(0, 140)}...</p>
+
+            <div className="card-tags">
+                <span className={`badge ${getPriorityClass(complaint.priority)}`}>
+                    {complaint.priority}
+                </span>
+
+                {daysRemaining !== null && (
+                    <span className={`sla-badge ${getSLAClass(daysRemaining)}`}>
+                        {daysRemaining < 0 ? '⚠️ Overdue' : `⏱️ ${daysRemaining} days left`}
+                    </span>
+                )}
+            </div>
 
             <div className="card-footer">
-                <div className="footer-left">
-                    {complaint.dueDate && (
-                        <span className={`sla-badge ${getSLAClass(daysRemaining)}`}>
-                            ⏱️ {daysRemaining < 0 ? 'Overdue' : `${daysRemaining}d left`}
-                        </span>
-                    )}
+                <div className="card-meta">
+                    <span className="meta-date">📅 {formatDate(complaint.createdAt)}</span>
                     {complaint.attachments?.length > 0 && (
-                        <span className="attachment-count">📎 {complaint.attachments.length}</span>
+                        <span className="meta-item">📎 {complaint.attachments.length}</span>
                     )}
                     {complaint.comments?.length > 0 && (
-                        <span className="comment-count">💬 {complaint.comments.length}</span>
+                        <span className="meta-item">💬 {complaint.comments.length}</span>
+                    )}
+                    {complaint.rating?.score && (
+                        <span className="meta-item rating">⭐ {complaint.rating.score}</span>
                     )}
                 </div>
-                <Link to={`/complaint/${complaint._id}`} className="btn btn-primary btn-sm">
+
+                <Link to={`/complaint/${complaint._id}`} className="card-action">
                     View Details →
                 </Link>
             </div>
 
-            {complaint.rating?.score && (
-                <div className="rating-display">
-                    {'★'.repeat(complaint.rating.score)}{'☆'.repeat(5 - complaint.rating.score)}
-                </div>
-            )}
-
             <style>{`
                 .complaint-card {
-                    margin-bottom: 1rem;
+                    background: var(--bg-card);
+                    border: 2px solid var(--border-color);
+                    border-radius: var(--radius-xl);
+                    padding: 32px;
+                    margin-bottom: 20px;
+                    transition: all 0.3s ease;
+                }
+
+                .complaint-card:hover {
+                    box-shadow: var(--shadow-hover);
+                    border-color: var(--border-hover);
+                    transform: translateY(-4px);
                 }
 
                 .card-header {
-                    margin-bottom: 0.75rem;
-                }
-
-                .card-title-row {
                     display: flex;
                     justify-content: space-between;
-                    align-items: flex-start;
-                    gap: 1rem;
-                    margin-bottom: 0.5rem;
+                    align-items: center;
+                    margin-bottom: 16px;
+                }
+
+                .card-category {
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    color: var(--accent);
+                    background: var(--accent-light);
+                    padding: 6px 14px;
+                    border-radius: 100px;
                 }
 
                 .card-title {
-                    font-size: 1.125rem;
-                    font-weight: 600;
-                    color: var(--color-text-primary);
-                    margin: 0;
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: var(--text-main);
+                    margin: 0 0 12px 0;
+                    line-height: 1.3;
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 10px;
                 }
 
-                .anonymous-badge {
-                    font-size: 1rem;
+                .anon-icon {
+                    font-size: 20px;
                 }
 
-                .card-meta {
+                .card-desc {
+                    color: var(--text-secondary);
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin: 0 0 20px 0;
+                }
+
+                .card-tags {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: 0.5rem;
                     align-items: center;
-                }
-
-                .category-tag,
-                .date-tag {
-                    font-size: 0.75rem;
-                    color: var(--color-text-secondary);
-                }
-
-                .card-description {
-                    color: var(--color-text-secondary);
-                    font-size: 0.875rem;
-                    margin: 0 0 1rem 0;
-                    line-height: 1.5;
+                    gap: 12px;
+                    margin-bottom: 24px;
+                    padding-bottom: 24px;
+                    border-bottom: 2px solid var(--border-color);
                 }
 
                 .card-footer {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding-top: 0.75rem;
-                    border-top: 1px solid var(--color-border);
                 }
 
-                .footer-left {
+                .card-meta {
                     display: flex;
-                    gap: 0.75rem;
-                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 20px;
                 }
 
-                .attachment-count,
-                .comment-count {
-                    font-size: 0.75rem;
-                    color: var(--color-text-muted);
+                .meta-date,
+                .meta-item {
+                    font-size: 14px;
+                    color: var(--text-muted);
+                    font-weight: 500;
                 }
 
-                .btn-sm {
-                    padding: 0.375rem 0.75rem;
-                    font-size: 0.75rem;
+                .meta-item.rating {
+                    color: var(--sand);
+                    font-weight: 700;
                 }
 
-                .rating-display {
-                    margin-top: 0.75rem;
-                    color: #fbbf24;
-                    font-size: 1rem;
-                    letter-spacing: 0.125rem;
+                .card-action {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: var(--accent);
+                    text-decoration: none;
+                    padding: 12px 24px;
+                    background: var(--accent-light);
+                    border-radius: var(--radius-md);
+                    transition: all 0.2s ease;
+                }
+
+                .card-action:hover {
+                    background: var(--accent);
+                    color: white;
+                    transform: translateX(4px);
                 }
 
                 @media (max-width: 640px) {
-                    .card-title-row {
-                        flex-direction: column;
-                        gap: 0.5rem;
+                    .complaint-card {
+                        padding: 24px;
+                    }
+
+                    .card-title {
+                        font-size: 18px;
                     }
 
                     .card-footer {
                         flex-direction: column;
-                        gap: 0.75rem;
+                        gap: 16px;
                         align-items: stretch;
                     }
 
-                    .footer-left {
-                        justify-content: center;
+                    .card-action {
+                        text-align: center;
                     }
                 }
             `}</style>
-        </div>
+        </article>
     );
 };
 
