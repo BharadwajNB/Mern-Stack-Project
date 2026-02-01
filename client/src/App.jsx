@@ -3,11 +3,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import NewComplaint from './pages/NewComplaint';
+import ComplaintDetail from './pages/ComplaintDetail';
 import { useAuth } from './context/AuthContext';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loading-screen">Loading...</div>;
   return user ? children : <Navigate to="/login" />;
 };
 
@@ -29,6 +30,14 @@ function App() {
         element={
           <PrivateRoute>
             <NewComplaint />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/complaint/:id"
+        element={
+          <PrivateRoute>
+            <ComplaintDetail />
           </PrivateRoute>
         }
       />

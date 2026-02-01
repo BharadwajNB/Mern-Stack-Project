@@ -1,107 +1,271 @@
 const Complaint = require('../models/Complaint');
+const { uploadToCloudinary, deleteFromCloudinary } = require('../config/cloudinary');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
 // @access  Private (Student)
 const createComplaint = async (req, res) => {
-    const { title, description, category, priority } = req.body;
+    try {
+        const { title, description, category, priority, isAnonymous } = req.body;
 
-    if (!title || !description || !category) {
-        return res.status(400).json({ message: 'Please fill all fields' });
+        if (!title || !description || !category) {
+            return res.status(400).json({ message: 'Please fill all required fields' });
+        }
+
+        // Handle file uploads
+        let attachments = [];
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                const result = await uploadToCloudinary(file.buffer);
+                attachments.push({
+                    filename: file.originalname,
+                    url: result.secure_url,
+                    publicId: result.public_id
+                });
+            }
+        }
+
+        const complaint = await Complaint.create({
+            student: req.user.id,
+            title,
+            description,
+            category,
+            priority: priority || 'Medium',
+            isAnonymous: isAnonymous === 'true' || isAnonymous === true,
+            attachments,
+            history: [{
+                action: 'Created',
+                by: req.user.id,
+                remark: 'Complaint filed'
+            }]
+        });
+
+        res.status(201).json(complaint);
+    } catch (error) {
+        console.error('Create complaint error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    const complaint = await Complaint.create({
-        student: req.user.id,
-        title,
-        description,
-        category,
-        priority: priority || 'Medium',
-        history: [{
-            action: 'Created',
-            by: req.user.id,
-            remark: 'Complaint filed'
-        }]
-    });
-
-    res.status(201).json(complaint);
 };
 
 // @desc    Get all complaints (Role based filtering)
 // @route   GET /api/complaints
 // @access  Private
 const getComplaints = async (req, res) => {
-    let complaints;
+    try {
+        let complaints;
+        const populateOptions = [
+            { path: 'assignedTo', select: 'name email' }
+        ];
 
-    if (req.user.role === 'student') {
-        complaints = await Complaint.find({ student: req.user.id }).sort({ createdAt: -1 });
-    } else if (req.user.role === 'faculty') {
-        // Faculty sees complaints assigned to them or in their department (Simplified to ALL for now or matching category if we mapped category->dept)
-        // For this version: Faculty sees ALL complaints to pick from/manage, or strictly assigned. user assumption: Dept level.
-        // Assuming 'category' maps to Dept. We'll simply show ALL for Faculty for now to ensure visibility, or filter by category if user has department.
-        complaints = await Complaint.find({}).sort({ createdAt: -1 });
-        // TODO: Refine filter based on Dept matching if needed.
-    } else {
-        // Admin sees all
-        complaints = await Complaint.find({}).populate('student', 'name email').sort({ createdAt: -1 });
+        if (req.user.role === 'student') {
+            complaints = await Complaint.find({ student: req.user.id })
+                .populate(populateOptions)
+                .sort({ createdAt: -1 });
+        } else if (req.user.role === 'faculty') {
+            // Faculty sees complaints in their category or assigned to them
+            complaints = await Complaint.find({})
+                .populate([...populateOptions, { path: 'student', select: 'name email department' }])
+                .sort({ createdAt: -1 });
+        } else {
+            // Admin sees all
+            complaints = await Complaint.find({})
+                .populate([...populateOptions, { path: 'student', select: 'name email department' }])
+                .sort({ createdAt: -1 });
+        }
+
+        // Hide student info for anonymous complaints (except for the student themselves)
+        const processed = complaints.map(c => {
+            const obj = c.toObject();
+            if (obj.isAnonymous && req.user.role !== 'student') {
+                obj.student = { name: 'Anonymous', email: 'hidden' };
+            }
+            return obj;
+        });
+
+        res.status(200).json(processed);
+    } catch (error) {
+        console.error('Get complaints error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    res.status(200).json(complaints);
 };
 
 // @desc    Get single complaint
 // @route   GET /api/complaints/:id
 // @access  Private
 const getComplaintById = async (req, res) => {
-    const complaint = await Complaint.findById(req.params.id)
-        .populate('student', 'name email')
-        .populate('assignedTo', 'name email');
+    try {
+        const complaint = await Complaint.findById(req.params.id)
+            .populate('student', 'name email')
+            .populate('assignedTo', 'name email')
+            .populate('comments.user', 'name email role')
+            .populate('history.by', 'name');
 
-    if (!complaint) {
-        return res.status(404).json({ message: 'Complaint not found' });
+        if (!complaint) {
+            return res.status(404).json({ message: 'Complaint not found' });
+        }
+
+        // Access Control
+        if (req.user.role === 'student' && complaint.student._id.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized' });
+        }
+
+        const obj = complaint.toObject();
+        // Hide student info for anonymous complaints (except for the student themselves)
+        if (obj.isAnonymous && req.user.role !== 'student') {
+            obj.student = { name: 'Anonymous', email: 'hidden' };
+        }
+
+        res.status(200).json(obj);
+    } catch (error) {
+        console.error('Get complaint by id error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    // Access Control
-    if (req.user.role === 'student' && complaint.student._id.toString() !== req.user.id) {
-        return res.status(401).json({ message: 'Not authorized' });
-    }
-
-    res.status(200).json(complaint);
 };
 
 // @desc    Update complaint status
 // @route   PUT /api/complaints/:id
 // @access  Private (Faculty/Admin)
 const updateComplaintStatus = async (req, res) => {
-    const { status, remark } = req.body;
+    try {
+        const { status, remark } = req.body;
 
-    const complaint = await Complaint.findById(req.params.id);
+        const complaint = await Complaint.findById(req.params.id);
 
-    if (!complaint) {
-        return res.status(404).json({ message: 'Complaint not found' });
+        if (!complaint) {
+            return res.status(404).json({ message: 'Complaint not found' });
+        }
+
+        if (req.user.role === 'student') {
+            return res.status(403).json({ message: 'Students cannot update status' });
+        }
+
+        complaint.status = status || complaint.status;
+        if (req.user.role === 'faculty' && !complaint.assignedTo) {
+            complaint.assignedTo = req.user.id;
+        }
+
+        complaint.history.push({
+            action: `Status changed to ${status}`,
+            by: req.user.id,
+            remark: remark || ''
+        });
+
+        await complaint.save();
+
+        const updated = await Complaint.findById(req.params.id)
+            .populate('student', 'name email')
+            .populate('assignedTo', 'name email')
+            .populate('comments.user', 'name email role');
+
+        res.status(200).json(updated);
+    } catch (error) {
+        console.error('Update complaint status error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
+};
 
-    if (req.user.role === 'student') {
-        return res.status(403).json({ message: 'Students cannot update status' });
+// @desc    Add comment to complaint
+// @route   POST /api/complaints/:id/comment
+// @access  Private
+const addComment = async (req, res) => {
+    try {
+        const { message } = req.body;
+
+        if (!message) {
+            return res.status(400).json({ message: 'Comment message is required' });
+        }
+
+        const complaint = await Complaint.findById(req.params.id);
+
+        if (!complaint) {
+            return res.status(404).json({ message: 'Complaint not found' });
+        }
+
+        // Access control: student can only comment on their own complaints
+        if (req.user.role === 'student' && complaint.student.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized' });
+        }
+
+        complaint.comments.push({
+            user: req.user.id,
+            message
+        });
+
+        complaint.history.push({
+            action: 'Comment added',
+            by: req.user.id,
+            remark: message.substring(0, 50)
+        });
+
+        await complaint.save();
+
+        const updated = await Complaint.findById(req.params.id)
+            .populate('comments.user', 'name email role');
+
+        res.status(200).json(updated);
+    } catch (error) {
+        console.error('Add comment error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
+};
 
-    complaint.status = status || complaint.status;
-    if (req.user.role === 'faculty' && !complaint.assignedTo) {
-        complaint.assignedTo = req.user.id; // Auto-assign if faculty interacts
+// @desc    Rate a resolved complaint
+// @route   POST /api/complaints/:id/rate
+// @access  Private (Student only, own complaint)
+const rateComplaint = async (req, res) => {
+    try {
+        const { score, feedback } = req.body;
+
+        if (!score || score < 1 || score > 5) {
+            return res.status(400).json({ message: 'Rating score must be between 1 and 5' });
+        }
+
+        const complaint = await Complaint.findById(req.params.id);
+
+        if (!complaint) {
+            return res.status(404).json({ message: 'Complaint not found' });
+        }
+
+        // Only the student who filed can rate
+        if (complaint.student.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized' });
+        }
+
+        // Only resolved complaints can be rated
+        if (complaint.status !== 'Resolved') {
+            return res.status(400).json({ message: 'Only resolved complaints can be rated' });
+        }
+
+        // Prevent re-rating
+        if (complaint.rating && complaint.rating.score) {
+            return res.status(400).json({ message: 'Complaint already rated' });
+        }
+
+        complaint.rating = {
+            score,
+            feedback: feedback || '',
+            ratedAt: new Date()
+        };
+
+        complaint.history.push({
+            action: `Rated ${score}/5 stars`,
+            by: req.user.id,
+            remark: feedback || ''
+        });
+
+        await complaint.save();
+        res.status(200).json(complaint);
+    } catch (error) {
+        console.error('Rate complaint error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    complaint.history.push({
-        action: `Status Updated to ${status}`,
-        by: req.user.id,
-        remark: remark || ''
-    });
-
-    await complaint.save();
-    res.status(200).json(complaint);
 };
 
 module.exports = {
     createComplaint,
     getComplaints,
     getComplaintById,
-    updateComplaintStatus
+    updateComplaintStatus,
+    addComment,
+    rateComplaint
 };
