@@ -29,12 +29,10 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-link">
                         <div className="logo-box">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                            </svg>
+                            <img src="/servio-logo.png" alt="SERVIO Logo" className="logo-img" />
                         </div>
                         <div className="logo-text">
-                            <span className="logo-name">ComplaintHub</span>
+                            <span className="logo-name">SERVIO</span>
                             <span className="logo-tagline">University Portal</span>
                         </div>
                     </Link>
@@ -123,13 +121,18 @@ const Navbar = () => {
                 .logo-box {
                     width: 48px;
                     height: 48px;
-                    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
                     border-radius: 12px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: white;
-                    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+                    overflow: hidden;
+                }
+
+                .logo-img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 12px;
                 }
 
                 .logo-text {
