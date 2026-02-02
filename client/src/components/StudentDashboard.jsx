@@ -78,14 +78,14 @@ const StudentDashboard = () => {
 
             <style>{`
                 .dashboard-content {
-                    padding: 48px 0;
+                    padding: 32px 0;
                 }
 
                 .dash-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 .header-main {
@@ -119,9 +119,9 @@ const StudentDashboard = () => {
 
                 .filter-tabs {
                     display: flex;
-                    gap: 12px;
-                    margin-bottom: 36px;
-                    padding: 8px;
+                    gap: 8px;
+                    margin-bottom: 20px;
+                    padding: 6px;
                     background: var(--bg-elevated);
                     border-radius: var(--radius-lg);
                     width: fit-content;
@@ -130,8 +130,8 @@ const StudentDashboard = () => {
                 .filter-tab {
                     background: transparent;
                     border: none;
-                    padding: 14px 24px;
-                    font-size: 15px;
+                    padding: 12px 20px;
+                    font-size: 14px;
                     font-weight: 600;
                     color: var(--text-muted);
                     cursor: pointer;
@@ -154,20 +154,20 @@ const StudentDashboard = () => {
 
                 .empty-state {
                     text-align: center;
-                    padding: 80px 40px;
+                    padding: 60px 40px;
                     background: var(--bg-card);
                     border: 2px solid var(--border-color);
                     border-radius: var(--radius-xl);
                 }
 
                 .loading-spinner {
-                    width: 48px;
-                    height: 48px;
+                    width: 40px;
+                    height: 40px;
                     border: 4px solid var(--border-color);
                     border-top-color: var(--accent);
                     border-radius: 50%;
                     animation: spin 0.8s linear infinite;
-                    margin: 0 auto 24px;
+                    margin: 0 auto 20px;
                 }
 
                 @keyframes spin {
@@ -175,31 +175,31 @@ const StudentDashboard = () => {
                 }
 
                 .empty-icon {
-                    font-size: 72px;
-                    margin-bottom: 24px;
+                    font-size: 56px;
+                    margin-bottom: 16px;
                 }
 
                 .empty-state h2 {
-                    margin: 0 0 12px 0;
-                    font-size: 28px;
+                    margin: 0 0 8px 0;
+                    font-size: 24px;
                     font-weight: 700;
                     color: var(--text-main);
                 }
 
                 .empty-state p {
-                    margin: 0 0 32px;
-                    font-size: 18px;
+                    margin: 0 0 24px;
+                    font-size: 16px;
                     color: var(--text-secondary);
                 }
 
                 @media (max-width: 768px) {
                     .dashboard-content {
-                        padding: 32px 0;
+                        padding: 24px 0;
                     }
 
                     .dash-header {
                         flex-direction: column;
-                        gap: 24px;
+                        gap: 20px;
                         align-items: stretch;
                     }
 
@@ -217,7 +217,7 @@ const StudentDashboard = () => {
                     }
 
                     .filter-tab {
-                        padding: 12px 20px;
+                        padding: 10px 16px;
                         white-space: nowrap;
                     }
                 }
