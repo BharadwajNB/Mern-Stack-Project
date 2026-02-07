@@ -61,12 +61,12 @@ const NewComplaint = () => {
         <div className="page">
             <Navbar />
             <main className="container">
+                <div className="page-nav">
+                    <Link to="/dashboard" className="back-link">
+                        ← Back to complaints
+                    </Link>
+                </div>
                 <div className="new-complaint-page">
-                    <div className="page-nav">
-                        <Link to="/dashboard" className="back-link">
-                            ← Back to complaints
-                        </Link>
-                    </div>
 
                     <div className="complaint-form-card">
                         <div className="form-header">
@@ -159,7 +159,7 @@ const NewComplaint = () => {
                                         <div className="toggle-thumb"></div>
                                     </div>
                                     <div className="anon-text">
-                                        <span className="anon-title">🎭 Submit Anonymously</span>
+                                        <span className="anon-title">Submit Anonymously</span>
                                         <span className="anon-desc">Your identity will be hidden from faculty</span>
                                     </div>
                                 </label>
@@ -183,14 +183,15 @@ const NewComplaint = () => {
             </main>
 
             <style>{`
+                .page-nav {
+                    margin-bottom: 8px;
+                    padding-top: 4px;
+                }
+
                 .new-complaint-page {
                     max-width: 720px;
                     margin: 0 auto;
-                    padding: 32px 0 64px;
-                }
-
-                .page-nav {
-                    margin-bottom: 24px;
+                    padding: 0 0 64px;
                 }
 
                 .back-link {
