@@ -29,7 +29,7 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-link">
                         <div className="logo-box">
-                            <img src="/servio-logo.png" alt="SERVIO Logo" className="logo-img" />
+                            <img src="/servio-logo.svg" alt="SERVIO Logo" className="logo-img" />
                         </div>
                         <div className="logo-text">
                             <span className="logo-name">SERVIO</span>
