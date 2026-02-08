@@ -41,28 +41,44 @@ const FacultyDashboard = () => {
 
             <div className="stats-grid">
                 <div className="stat-card">
-                    <div className="stat-icon pending">⏳</div>
+                    <div className="stat-icon pending">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                        </svg>
+                    </div>
                     <div className="stat-info">
                         <span className="stat-value">{pendingCount}</span>
                         <span className="stat-label">Pending</span>
                     </div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-icon progress">🔄</div>
+                    <div className="stat-icon progress">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                        </svg>
+                    </div>
                     <div className="stat-info">
                         <span className="stat-value">{inProgressCount}</span>
                         <span className="stat-label">In Progress</span>
                     </div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-icon resolved">✅</div>
+                    <div className="stat-icon resolved">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                    </div>
                     <div className="stat-info">
                         <span className="stat-value">{resolvedCount}</span>
                         <span className="stat-label">Resolved</span>
                     </div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-icon total">📊</div>
+                    <div className="stat-icon total">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" />
+                        </svg>
+                    </div>
                     <div className="stat-info">
                         <span className="stat-value">{complaints.length}</span>
                         <span className="stat-label">Total</span>
@@ -103,58 +119,57 @@ const FacultyDashboard = () => {
 
             <style>{`
                 .dashboard-content {
-                    padding: 48px 0;
+                    padding: 24px 0;
                 }
 
                 .dash-header {
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
 
                 .dash-header h1 {
                     margin: 0;
-                    font-size: 36px;
-                    font-weight: 800;
+                    font-size: 24px;
+                    font-weight: 700;
                     color: var(--text-main);
-                    letter-spacing: -0.02em;
+                    letter-spacing: -0.01em;
                 }
 
                 .stats-grid {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 24px;
-                    margin-bottom: 40px;
+                    gap: 16px;
+                    margin-bottom: 24px;
                 }
 
                 .stat-card {
                     background: var(--bg-card);
-                    border: 2px solid var(--border-color);
-                    border-radius: var(--radius-xl);
-                    padding: 28px;
+                    border: 1px solid var(--border-color);
+                    border-radius: var(--radius-md);
+                    padding: 16px;
                     display: flex;
                     align-items: center;
-                    gap: 20px;
-                    transition: all 0.3s ease;
+                    gap: 12px;
+                    transition: all 0.2s ease;
                 }
 
                 .stat-card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: var(--shadow-card);
+                    transform: translateY(-2px);
+                    box-shadow: var(--shadow-sm);
                 }
 
                 .stat-icon {
-                    width: 64px;
-                    height: 64px;
-                    border-radius: var(--radius-lg);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: var(--radius-sm);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 28px;
                 }
 
-                .stat-icon.pending { background: #fef3c7; }
-                .stat-icon.progress { background: #dbeafe; }
-                .stat-icon.resolved { background: var(--mint-light); }
-                .stat-icon.total { background: var(--bg-elevated); }
+                .stat-icon.pending { background: #fef3c7; color: #b45309; }
+                .stat-icon.progress { background: #dbeafe; color: #1d4ed8; }
+                .stat-icon.resolved { background: var(--mint-light); color: #047857; }
+                .stat-icon.total { background: var(--bg-elevated); color: var(--text-secondary); }
 
                 .stat-info {
                     display: flex;
@@ -162,42 +177,42 @@ const FacultyDashboard = () => {
                 }
 
                 .stat-value {
-                    font-size: 36px;
-                    font-weight: 800;
+                    font-size: 22px;
+                    font-weight: 700;
                     color: var(--text-main);
                     line-height: 1;
                 }
 
                 .stat-label {
-                    font-size: 14px;
-                    font-weight: 600;
+                    font-size: 12px;
+                    font-weight: 500;
                     color: var(--text-muted);
                     text-transform: uppercase;
-                    letter-spacing: 0.04em;
-                    margin-top: 4px;
+                    letter-spacing: 0.03em;
+                    margin-top: 2px;
                 }
 
                 .filter-tabs {
                     display: flex;
-                    gap: 12px;
-                    margin-bottom: 36px;
-                    padding: 8px;
+                    gap: 8px;
+                    margin-bottom: 20px;
+                    padding: 4px;
                     background: var(--bg-elevated);
-                    border-radius: var(--radius-lg);
+                    border-radius: var(--radius-sm);
                     width: fit-content;
                 }
 
                 .filter-tab {
                     background: transparent;
                     border: none;
-                    padding: 14px 24px;
-                    font-size: 15px;
-                    font-weight: 600;
+                    padding: 8px 16px;
+                    font-size: 13px;
+                    font-weight: 500;
                     color: var(--text-muted);
                     cursor: pointer;
-                    border-radius: var(--radius-md);
+                    border-radius: var(--radius-sm);
                     text-transform: capitalize;
-                    transition: all 0.2s ease;
+                    transition: all 0.15s ease;
                     font-family: var(--font-main);
                 }
 
@@ -209,7 +224,6 @@ const FacultyDashboard = () => {
                 .filter-tab.active {
                     background: var(--navy);
                     color: white;
-                    box-shadow: var(--shadow-sm);
                 }
 
                 .empty-state {

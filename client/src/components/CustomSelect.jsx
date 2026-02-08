@@ -21,6 +21,7 @@ const CustomSelect = ({
     }, []);
 
     const handleSelect = (optionValue) => {
+        console.log('CustomSelect: selected value:', optionValue);
         onChange({ target: { name, value: optionValue } });
         setIsOpen(false);
     };
@@ -58,7 +59,11 @@ const CustomSelect = ({
                             <div
                                 key={index}
                                 className={`custom-select-option ${isSelected ? 'selected' : ''}`}
-                                onClick={() => handleSelect(optValue)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleSelect(optValue);
+                                }}
                             >
                                 {optLabel}
                                 {isSelected && (

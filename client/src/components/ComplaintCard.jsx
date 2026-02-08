@@ -96,67 +96,67 @@ const ComplaintCard = ({ complaint }) => {
             <style>{`
                 .complaint-card {
                     background: var(--bg-card);
-                    border: 2px solid var(--border-color);
-                    border-radius: var(--radius-xl);
-                    padding: 32px;
-                    margin-bottom: 20px;
-                    transition: all 0.3s ease;
+                    border: 1px solid var(--border-color);
+                    border-radius: var(--radius-md);
+                    padding: 20px;
+                    margin-bottom: 12px;
+                    transition: all 0.2s ease;
                 }
 
                 .complaint-card:hover {
-                    box-shadow: var(--shadow-hover);
+                    box-shadow: var(--shadow-sm);
                     border-color: var(--border-hover);
-                    transform: translateY(-4px);
+                    transform: translateY(-2px);
                 }
 
                 .card-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 16px;
+                    margin-bottom: 10px;
                 }
 
                 .card-category {
-                    font-size: 12px;
+                    font-size: 11px;
                     font-weight: 700;
                     text-transform: uppercase;
                     letter-spacing: 0.1em;
                     color: var(--accent);
                     background: var(--accent-light);
-                    padding: 6px 14px;
+                    padding: 4px 10px;
                     border-radius: 100px;
                 }
 
                 .card-title {
-                    font-size: 22px;
-                    font-weight: 700;
+                    font-size: 16px;
+                    font-weight: 600;
                     color: var(--text-main);
-                    margin: 0 0 12px 0;
+                    margin: 0 0 8px 0;
                     line-height: 1.3;
                     display: flex;
                     align-items: center;
-                    gap: 10px;
+                    gap: 8px;
                 }
 
                 .anon-icon {
-                    font-size: 20px;
+                    font-size: 14px;
                 }
 
                 .card-desc {
                     color: var(--text-secondary);
-                    font-size: 16px;
-                    line-height: 1.6;
-                    margin: 0 0 20px 0;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    margin: 0 0 14px 0;
                 }
 
                 .card-tags {
                     display: flex;
                     flex-wrap: wrap;
                     align-items: center;
-                    gap: 12px;
-                    margin-bottom: 24px;
-                    padding-bottom: 24px;
-                    border-bottom: 2px solid var(--border-color);
+                    gap: 8px;
+                    margin-bottom: 16px;
+                    padding-bottom: 16px;
+                    border-bottom: 1px solid var(--border-color);
                 }
 
                 .card-footer {
@@ -168,36 +168,35 @@ const ComplaintCard = ({ complaint }) => {
                 .card-meta {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: 20px;
+                    gap: 14px;
                 }
 
                 .meta-date,
                 .meta-item {
-                    font-size: 14px;
+                    font-size: 12px;
                     color: var(--text-muted);
                     font-weight: 500;
                 }
 
                 .meta-item.rating {
                     color: var(--sand);
-                    font-weight: 700;
+                    font-weight: 600;
                 }
 
                 .card-action {
-                    font-size: 16px;
-                    font-weight: 700;
+                    font-size: 13px;
+                    font-weight: 600;
                     color: var(--accent);
                     text-decoration: none;
-                    padding: 12px 24px;
+                    padding: 8px 16px;
                     background: var(--accent-light);
-                    border-radius: var(--radius-md);
-                    transition: all 0.2s ease;
+                    border-radius: var(--radius-sm);
+                    transition: all 0.15s ease;
                 }
 
                 .card-action:hover {
                     background: var(--accent);
                     color: white;
-                    transform: translateX(4px);
                 }
 
                 @media (max-width: 640px) {
