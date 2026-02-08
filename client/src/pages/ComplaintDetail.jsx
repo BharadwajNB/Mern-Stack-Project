@@ -5,6 +5,7 @@ import api from '../api/axios';
 import Navbar from '../components/Navbar';
 import CommentThread from '../components/CommentThread';
 import RatingModal from '../components/RatingModal';
+import CustomSelect from '../components/CustomSelect';
 
 const getStatusClass = (status) => {
     const map = {
@@ -226,16 +227,12 @@ const ComplaintDetail = () => {
                                 <h3>Update Status</h3>
                                 <form onSubmit={handleStatusUpdate}>
                                     <div className="form-group">
-                                        <select
+                                        <CustomSelect
                                             value={statusUpdate.status}
                                             onChange={(e) => setStatusUpdate(prev => ({ ...prev, status: e.target.value }))}
-                                            className="form-select"
-                                        >
-                                            <option value="Pending">Pending</option>
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Resolved">Resolved</option>
-                                            <option value="Rejected">Rejected</option>
-                                        </select>
+                                            name="status"
+                                            options={['Pending', 'In Progress', 'Resolved', 'Rejected']}
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <textarea

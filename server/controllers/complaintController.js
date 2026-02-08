@@ -157,7 +157,13 @@ const updateComplaintStatus = async (req, res) => {
             .populate('assignedTo', 'name email')
             .populate('comments.user', 'name email role');
 
-        res.status(200).json(updated);
+        const obj = updated.toObject();
+        // Hide student info for anonymous complaints
+        if (obj.isAnonymous && req.user.role !== 'student') {
+            obj.student = { name: 'Anonymous', email: 'hidden' };
+        }
+
+        res.status(200).json(obj);
     } catch (error) {
         console.error('Update complaint status error:', error);
         res.status(500).json({ message: 'Server error' });
