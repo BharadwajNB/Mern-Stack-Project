@@ -56,7 +56,6 @@ const ComplaintCard = ({ complaint }) => {
             </div>
 
             <h3 className="card-title">
-                {complaint.isAnonymous && <span className="anon-icon">🎭</span>}
                 {complaint.title}
             </h3>
 
@@ -69,22 +68,45 @@ const ComplaintCard = ({ complaint }) => {
 
                 {daysRemaining !== null && (
                     <span className={`sla-badge ${getSLAClass(daysRemaining)}`}>
-                        {daysRemaining < 0 ? '⚠️ Overdue' : `⏱️ ${daysRemaining} days left`}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                        </svg>
+                        {daysRemaining < 0 ? 'Overdue' : `${daysRemaining} days left`}
                     </span>
                 )}
             </div>
 
             <div className="card-footer">
                 <div className="card-meta">
-                    <span className="meta-date">📅 {formatDate(complaint.createdAt)}</span>
+                    <span className="meta-date">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+                        </svg>
+                        {formatDate(complaint.createdAt)}
+                    </span>
                     {complaint.attachments?.length > 0 && (
-                        <span className="meta-item">📎 {complaint.attachments.length}</span>
+                        <span className="meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                            </svg>
+                            {complaint.attachments.length}
+                        </span>
                     )}
                     {complaint.comments?.length > 0 && (
-                        <span className="meta-item">💬 {complaint.comments.length}</span>
+                        <span className="meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                            </svg>
+                            {complaint.comments.length}
+                        </span>
                     )}
                     {complaint.rating?.score && (
-                        <span className="meta-item rating">⭐ {complaint.rating.score}</span>
+                        <span className="meta-item rating">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            {complaint.rating.score}
+                        </span>
                     )}
                 </div>
 
@@ -176,12 +198,29 @@ const ComplaintCard = ({ complaint }) => {
                     font-size: 12px;
                     color: var(--text-muted);
                     font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
                 }
 
                 .meta-item.rating {
                     color: var(--sand);
                     font-weight: 600;
                 }
+
+                .sla-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    padding: 4px 10px;
+                    border-radius: 100px;
+                }
+
+                .sla-badge.safe { background: var(--mint-light); color: #047857; }
+                .sla-badge.warning { background: #fef3c7; color: #b45309; }
+                .sla-badge.danger { background: #fef2f2; color: #dc2626; }
 
                 .card-action {
                     font-size: 13px;
