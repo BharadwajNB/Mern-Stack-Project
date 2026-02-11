@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 import FileUpload from '../components/FileUpload';
+import CustomSelect from '../components/CustomSelect';
 import Navbar from '../components/Navbar';
 
 const NewComplaint = () => {
@@ -101,30 +102,22 @@ const NewComplaint = () => {
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label className="form-label">Category</label>
-                                        <select
+                                        <CustomSelect
                                             name="category"
-                                            className="form-select"
                                             value={formData.category}
                                             onChange={handleChange}
-                                        >
-                                            {categories.map(cat => (
-                                                <option key={cat} value={cat}>{cat}</option>
-                                            ))}
-                                        </select>
+                                            options={categories}
+                                        />
                                     </div>
 
                                     <div className="form-group">
                                         <label className="form-label">Priority</label>
-                                        <select
+                                        <CustomSelect
                                             name="priority"
-                                            className="form-select"
                                             value={formData.priority}
                                             onChange={handleChange}
-                                        >
-                                            {priorities.map(p => (
-                                                <option key={p} value={p}>{p}</option>
-                                            ))}
-                                        </select>
+                                            options={priorities}
+                                        />
                                     </div>
                                 </div>
 
@@ -223,7 +216,7 @@ const NewComplaint = () => {
                 }
 
                 .header-icon {
-                    font-size: 40px;
+                    display: none;
                 }
 
                 .form-header h1 {
