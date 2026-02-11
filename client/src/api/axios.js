@@ -19,4 +19,20 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// Add a response interceptor to handle errors globally
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Log all API errors for debugging
+        console.error('API Error:', {
+            url: error.config?.url,
+            method: error.config?.method,
+            status: error.response?.status,
+            message: error.response?.data?.message || error.message,
+            data: error.response?.data
+        });
+        return Promise.reject(error);
+    }
+);
+
 export default api;

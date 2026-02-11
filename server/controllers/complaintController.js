@@ -97,7 +97,6 @@ const getComplaintById = async (req, res) => {
         const complaint = await Complaint.findById(req.params.id)
             .populate('student', 'name email')
             .populate('assignedTo', 'name email')
-            .populate('comments.user', 'name email role')
             .populate('history.by', 'name');
 
         if (!complaint) {
@@ -154,8 +153,7 @@ const updateComplaintStatus = async (req, res) => {
 
         const updated = await Complaint.findById(req.params.id)
             .populate('student', 'name email')
-            .populate('assignedTo', 'name email')
-            .populate('comments.user', 'name email role');
+            .populate('assignedTo', 'name email');
 
         const obj = updated.toObject();
         // Hide student info for anonymous complaints
@@ -170,50 +168,7 @@ const updateComplaintStatus = async (req, res) => {
     }
 };
 
-// @desc    Add comment to complaint
-// @route   POST /api/complaints/:id/comment
-// @access  Private
-const addComment = async (req, res) => {
-    try {
-        const { message } = req.body;
 
-        if (!message) {
-            return res.status(400).json({ message: 'Comment message is required' });
-        }
-
-        const complaint = await Complaint.findById(req.params.id);
-
-        if (!complaint) {
-            return res.status(404).json({ message: 'Complaint not found' });
-        }
-
-        // Access control: student can only comment on their own complaints
-        if (req.user.role === 'student' && complaint.student.toString() !== req.user.id) {
-            return res.status(401).json({ message: 'Not authorized' });
-        }
-
-        complaint.comments.push({
-            user: req.user.id,
-            message
-        });
-
-        complaint.history.push({
-            action: 'Comment added',
-            by: req.user.id,
-            remark: message.substring(0, 50)
-        });
-
-        await complaint.save();
-
-        const updated = await Complaint.findById(req.params.id)
-            .populate('comments.user', 'name email role');
-
-        res.status(200).json(updated);
-    } catch (error) {
-        console.error('Add comment error:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
 
 // @desc    Rate a resolved complaint
 // @route   POST /api/complaints/:id/rate
@@ -272,6 +227,5 @@ module.exports = {
     getComplaints,
     getComplaintById,
     updateComplaintStatus,
-    addComment,
     rateComplaint
 };

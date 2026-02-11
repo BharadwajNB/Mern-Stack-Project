@@ -5,7 +5,6 @@ const {
     getComplaints,
     getComplaintById,
     updateComplaintStatus,
-    addComment,
     rateComplaint
 } = require('../controllers/complaintController');
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -20,8 +19,7 @@ router.route('/:id')
     .get(protect, getComplaintById)
     .put(protect, authorize('faculty', 'admin'), updateComplaintStatus);
 
-// Comment route
-router.post('/:id/comment', protect, addComment);
+
 
 // Rating route (student only)
 router.post('/:id/rate', protect, authorize('student'), rateComplaint);
