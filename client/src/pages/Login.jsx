@@ -27,28 +27,13 @@ const Login = () => {
 
     return (
         <div className="login-page">
-            <div className="login-container">
-                {/* Left Panel - Gradient with Glassmorphism */}
+            <div className="login-card">
+                {/* Left Panel - Dark Login Form */}
                 <div className="login-left-panel">
-                    <div className="left-content">
-                        <div className="asterisk-icon">✱</div>
-                        <div className="left-text">
-                            <p className="subtitle">A simple and transparent way</p>
-                            <h2>to raise, track, and resolve student complaints</h2>
-                        </div>
-                    </div>
-                    <div className="glass-orb glass-orb-1"></div>
-                    <div className="glass-orb glass-orb-2"></div>
-                    <div className="glass-orb glass-orb-3"></div>
-                </div>
-
-                {/* Right Panel - Form */}
-                <div className="login-right-panel">
                     <div className="form-container">
                         <div className="form-header">
-                            <span className="form-asterisk">✱</span>
-                            <h1>Welcome Back</h1>
-                            <p>Access and manage complaints, track their status, and communicate seamlessly in one place.</p>
+                            <h1>Login</h1>
+                            <p>Enter your account details</p>
                         </div>
 
                         {error && (
@@ -60,10 +45,9 @@ const Login = () => {
 
                         <form onSubmit={handleSubmit} className="login-form">
                             <div className="input-group">
-                                <label>Email Address</label>
                                 <input
                                     type="email"
-                                    placeholder="you@university.edu"
+                                    placeholder="Username"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -71,11 +55,10 @@ const Login = () => {
                             </div>
 
                             <div className="input-group">
-                                <label>Password</label>
                                 <div className="password-wrapper">
                                     <input
                                         type={showPassword ? "text" : "password"}
-                                        placeholder="••••••••••"
+                                        placeholder="Password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
@@ -100,147 +83,159 @@ const Login = () => {
                                 </div>
                             </div>
 
+                            <div className="forgot-password">
+                                <a href="#">Forgot Password?</a>
+                            </div>
+
                             <button type="submit" className="submit-btn" disabled={loading}>
                                 {loading ? 'Signing in...' : 'Login'}
                             </button>
                         </form>
 
-                        <div className="divider">
-                            <span>or login with</span>
-                        </div>
-
-                        <div className="social-buttons">
-                            <button type="button" className="social-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                                </svg>
-                            </button>
-                            <button type="button" className="social-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                </svg>
-                            </button>
-                        </div>
-
                         <div className="login-footer">
                             <span>Don't have an account?</span>
-                            <Link to="/register" className="signup-link">Register here</Link>
+                            <Link to="/register" className="signup-link">Sign up</Link>
                         </div>
                     </div>
                 </div>
+
+                {/* Right Panel - Purple Welcome */}
+                <div className="login-right-panel">
+                    <div className="right-content">
+                        <div className="welcome-text">
+                            <h2>
+                                <span className="welcome-bold">Welcome to</span><br />
+                                <span className="welcome-light">student portal</span>
+                            </h2>
+                            <p>Login to access your account</p>
+                        </div>
+                        <div className="illustration-container">
+                            {/* Refined SVG Illustration: White silhouettes with dark accents, matching reference */}
+                            <svg viewBox="0 0 500 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="login-illustration">
+                                {/* Soft shadow ellipse */}
+                                <ellipse cx="250" cy="420" rx="180" ry="15" fill="rgba(0,0,0,0.1)" />
+
+                                {/* Large white document card in center */}
+                                <rect x="180" y="120" rx="4" width="180" height="240" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+
+                                {/* Document content - Minimalist lines */}
+                                <rect x="200" y="145" width="40" height="4" rx="2" fill="#1e1e2f" opacity="0.8" />
+                                <rect x="250" y="145" width="80" height="4" rx="2" fill="#ddd6fe" />
+
+                                <rect x="200" y="170" width="140" height="4" rx="2" fill="#ddd6fe" />
+                                <rect x="200" y="185" width="110" height="4" rx="2" fill="#ddd6fe" />
+
+                                {/* Checklist items */}
+                                <circle cx="208" cy="220" r="6" stroke="#1e1e2f" strokeWidth="1.5" fill="none" />
+                                <rect x="225" y="218" width="100" height="4" rx="2" fill="#ddd6fe" />
+
+                                <circle cx="208" cy="245" r="6" stroke="#1e1e2f" strokeWidth="1.5" fill="none" />
+                                <rect x="225" y="243" width="90" height="4" rx="2" fill="#ddd6fe" />
+
+                                <circle cx="208" cy="270" r="6" stroke="#1e1e2f" strokeWidth="1.5" fill="none" />
+                                <rect x="225" y="268" width="110" height="4" rx="2" fill="#ddd6fe" />
+
+                                <rect x="200" y="305" width="130" height="4" rx="2" fill="#ddd6fe" />
+                                <rect x="200" y="325" width="90" height="4" rx="2" fill="#ddd6fe" />
+
+                                {/* Person 1 - Sitting on top of document with laptop (Right facing) */}
+                                <g id="person-top">
+                                    {/* Legs hanging down */}
+                                    <path d="M330 120 L330 160 L345 160 L345 150" stroke="#1e1e2f" strokeWidth="12" strokeLinecap="round" fill="none" />
+                                    <path d="M300 120 L300 155 L315 155" stroke="#1e1e2f" strokeWidth="12" strokeLinecap="round" fill="none" />
+
+                                    {/* Body - White silhouette */}
+                                    <path d="M290 120 C290 90 330 90 340 120 Z" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+                                    <path d="M290 120 L280 90 C280 70 320 70 330 90 L340 120" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+
+                                    {/* Head */}
+                                    <circle cx="305" cy="70" r="14" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+                                    <path d="M290 70 C290 55 320 55 320 70" fill="#1e1e2f" />
+
+                                    {/* Laptop */}
+                                    <path d="M320 95 L350 95 L345 115 L325 115 Z" fill="#1e1e2f" />
+                                </g>
+
+                                {/* Person 2 - Left side walking (White silhouette, dark pants) */}
+                                <g id="person-left">
+                                    {/* Legs - Walking pose */}
+                                    <path d="M125 310 L115 380 L100 380" stroke="#1e1e2f" strokeWidth="10" strokeLinecap="round" fill="none" />
+                                    <path d="M145 310 L165 370 L180 370" stroke="#1e1e2f" strokeWidth="10" strokeLinecap="round" fill="none" />
+
+                                    {/* Body - White silhouette */}
+                                    <rect x="115" y="240" width="40" height="70" rx="20" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+
+                                    {/* Arm holding phone */}
+                                    <path d="M135 255 L110 280" stroke="#1e1e2f" strokeWidth="8" strokeLinecap="round" />
+                                    <rect x="100" y="270" width="12" height="20" transform="rotate(-30 100 270)" fill="#1e1e2f" />
+
+                                    {/* Head */}
+                                    <circle cx="135" cy="225" r="14" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+                                    <path d="M120 225 C120 210 150 210 150 225" fill="#1e1e2f" />
+
+                                    {/* Backpack details */}
+                                    <path d="M155 250 Q165 270 155 290" stroke="#1e1e2f" strokeWidth="2" fill="none" />
+                                </g>
+
+                                {/* Magnifying Glass - Large, Stylized */}
+                                <g id="magnifying-glass">
+                                    <circle cx="180" cy="300" r="45" stroke="#1e1e2f" strokeWidth="8" fill="rgba(255,255,255,0.2)" />
+                                    <circle cx="180" cy="300" r="35" stroke="#1e1e2f" strokeWidth="1" fill="none" opacity="0.3" />
+                                    <line x1="148" y1="332" x2="120" y2="360" stroke="#1e1e2f" strokeWidth="12" strokeLinecap="round" />
+                                </g>
+
+                                {/* Plant - Abstract */}
+                                <g id="plant">
+                                    <path d="M380 420 Q400 350 430 380 Q450 400 450 420 Z" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+                                    <path d="M400 420 Q420 370 450 390 Q470 410 470 420 Z" fill="white" stroke="#1e1e2f" strokeWidth="1.5" />
+                                    <path d="M380 420 L470 420 L460 450 L390 450 Z" fill="#1e1e2f" />
+                                </g>
+
+                                {/* Small decorative elements */}
+                                <path d="M100 150 L110 160 M110 150 L100 160" stroke="#1e1e2f" strokeWidth="2" />
+                                <circle cx="450" cy="100" r="3" fill="#1e1e2f" />
+                                <circle cx="430" cy="120" r="2" fill="#1e1e2f" />
+                            </svg>
+                        </div>
+                    </div>
+                    {/* Decorative blob */}
+                    <div className="purple-blob"></div>
+                </div>
             </div>
 
-            <style>{`
+            <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
                 .login-page {
-                    height: 100vh;
+                    min-height: 100vh;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background: #f0f0f3;
-                    padding: 16px;
-                    overflow: hidden;
+                    background: linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%);
+                    padding: 20px;
+                    font-family: 'Inter', sans-serif;
                 }
 
-                .login-container {
+                .login-card {
                     display: flex;
-                    width: 95%;
-                    max-width: 880px;
-                    min-height: 520px;
-                    height: auto;
-                    max-height: calc(100vh - 32px);
+                    width: 100%;
+                    max-width: 850px;
+                    min-height: 500px;
                     background: white;
-                    border-radius: 18px;
+                    border-radius: 20px;
                     overflow: hidden;
-                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
                 }
 
-                /* Left Panel */
+                /* ====== LEFT PANEL — Dark Form ====== */
                 .login-left-panel {
-                    width: 340px;
+                    width: 45%;
                     flex-shrink: 0;
-                    background: linear-gradient(160deg, #c4b5fd 0%, #a78bfa 20%, #8b5cf6 40%, #7c3aed 60%, #6d28d9 80%, #a78bfa 100%);
-                    padding: 36px;
-                    display: flex;
-                    flex-direction: column;
-                    position: relative;
-                    overflow: hidden;
-                }
-
-                .left-content {
-                    position: relative;
-                    z-index: 2;
-                    height: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                }
-
-                .asterisk-icon {
-                    color: white;
-                    font-size: 28px;
-                    font-weight: 300;
-                }
-
-                .left-text {
-                    margin-top: auto;
-                }
-
-                .left-text .subtitle {
-                    color: rgba(255, 255, 255, 0.75);
-                    font-size: 13px;
-                    margin: 0 0 6px 0;
-                    font-weight: 400;
-                }
-
-                .left-text h2 {
-                    color: white;
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 1.35;
-                    margin: 0;
-                }
-
-                /* Glassmorphism Orbs */
-                .glass-orb {
-                    position: absolute;
-                    border-radius: 50%;
-                    filter: blur(40px);
-                }
-
-                .glass-orb-1 {
-                    width: 160px;
-                    height: 160px;
-                    top: 15%;
-                    left: -20%;
-                    background: rgba(139, 92, 246, 0.7);
-                }
-
-                .glass-orb-2 {
-                    width: 100px;
-                    height: 100px;
-                    top: 35%;
-                    right: -10%;
-                    background: rgba(196, 181, 253, 0.6);
-                }
-
-                .glass-orb-3 {
-                    width: 80px;
-                    height: 80px;
-                    bottom: 30%;
-                    left: 40%;
-                    background: rgba(167, 139, 250, 0.5);
-                }
-
-                /* Right Panel */
-                .login-right-panel {
-                    flex: 1;
-                    padding: 40px 52px;
+                    background: #1e1e2f;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    padding: 40px;
+                    border-right: 1px solid rgba(255, 255, 255, 0.05);
                 }
 
                 .form-container {
@@ -249,254 +244,257 @@ const Login = () => {
                 }
 
                 .form-header {
-                    margin-bottom: 20px;
-                }
-
-                .form-asterisk {
-                    color: #6366f1;
-                    font-size: 22px;
-                    display: block;
-                    margin-bottom: 10px;
+                    margin-bottom: 32px;
                 }
 
                 .form-header h1 {
-                    font-size: 24px;
+                    font-size: 28px;
                     font-weight: 700;
-                    color: #1a1a2e;
+                    color: #ffffff;
                     margin: 0 0 8px 0;
+                    letter-spacing: -0.5px;
                 }
 
                 .form-header p {
                     font-size: 14px;
-                    color: #6b7280;
-                    line-height: 1.5;
+                    color: #9ca3af;
                     margin: 0;
+                    font-weight: 400;
                 }
 
+                /* Error */
                 .login-error {
                     display: flex;
                     align-items: center;
-                    gap: 6px;
-                    background: #fef2f2;
-                    color: #dc2626;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    font-size: 12px;
+                    gap: 8px;
+                    background: rgba(239, 68, 68, 0.1);
+                    color: #f87171;
+                    padding: 10px 14px;
+                    border-radius: 8px;
+                    font-size: 13px;
                     font-weight: 500;
-                    margin-bottom: 14px;
-                    border: 1px solid #fecaca;
+                    margin-bottom: 20px;
+                    border: 1px solid rgba(239, 68, 68, 0.2);
                 }
 
-                .login-form .input-group {
-                    margin-bottom: 14px;
-                }
-
-                .login-form label {
-                    display: block;
+                .error-icon {
                     font-size: 14px;
-                    font-weight: 500;
-                    color: #374151;
-                    margin-bottom: 6px;
+                }
+
+                /* Form */
+                .login-form .input-group {
+                    margin-bottom: 24px;
                 }
 
                 .login-form input {
                     width: 100%;
-                    padding: 12px 14px;
+                    padding: 10px 0;
                     font-size: 15px;
-                    background: #f9fafb;
-                    border: 1px solid #e5e7eb;
-                    border-radius: 8px;
-                    color: #1f2937;
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px solid #4b5563;
+                    border-radius: 0;
+                    color: #f3f4f6;
                     transition: all 0.2s ease;
-                    font-family: inherit;
+                    font-family: 'Inter', sans-serif;
+                    outline: none;
                 }
 
                 .login-form input:focus {
-                    outline: none;
-                    border-color: #6366f1;
-                    background: white;
-                    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+                    border-bottom-color: #a78bfa;
                 }
 
                 .login-form input::placeholder {
-                    color: #9ca3af;
+                    color: #6b7280;
                 }
 
+                /* Password */
                 .password-wrapper {
                     position: relative;
                 }
 
                 .password-wrapper input {
-                    padding-right: 40px;
+                    padding-right: 30px;
                 }
 
                 .toggle-password {
                     position: absolute;
-                    right: 10px;
+                    right: 0;
                     top: 50%;
                     transform: translateY(-50%);
                     background: none;
                     border: none;
                     color: #9ca3af;
                     cursor: pointer;
-                    padding: 2px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    padding: 0;
                     transition: color 0.2s;
                 }
 
                 .toggle-password:hover {
-                    color: #6366f1;
+                    color: #e5e7eb;
                 }
 
+                /* Forgot Password */
+                .forgot-password {
+                    text-align: right;
+                    margin-top: -14px;
+                    margin-bottom: 24px;
+                }
+
+                .forgot-password a {
+                    color: #9ca3af;
+                    text-decoration: none;
+                    font-size: 12px;
+                    transition: color 0.2s;
+                }
+
+                .forgot-password a:hover {
+                    color: #a78bfa;
+                }
+
+                /* Submit Button */
                 .submit-btn {
                     width: 100%;
-                    padding: 12px;
-                    font-size: 15px;
+                    padding: 14px;
+                    font-size: 16px;
                     font-weight: 600;
                     color: white;
-                    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+                    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
                     border: none;
-                    border-radius: 8px;
+                    border-radius: 12px;
                     cursor: pointer;
                     transition: all 0.2s ease;
-                    font-family: inherit;
-                    margin-top: 2px;
+                    box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.4), 0 2px 4px -1px rgba(139, 92, 246, 0.2);
                 }
 
                 .submit-btn:hover {
                     transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+                    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.5), 0 4px 6px -2px rgba(139, 92, 246, 0.3);
                 }
 
                 .submit-btn:disabled {
                     opacity: 0.7;
                     cursor: not-allowed;
-                    transform: none;
                 }
 
-                .divider {
-                    display: flex;
-                    align-items: center;
-                    margin: 16px 0;
-                }
-
-                .divider::before,
-                .divider::after {
-                    content: '';
-                    flex: 1;
-                    height: 1px;
-                    background: #e5e7eb;
-                }
-
-                .divider span {
-                    padding: 0 10px;
-                    font-size: 13px;
-                    color: #9ca3af;
-                }
-
-                .social-buttons {
-                    display: flex;
-                    gap: 8px;
-                    justify-content: center;
-                }
-
-                .social-btn {
-                    flex: 1;
-                    padding: 9px 14px;
-                    background: #f3f4f6;
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.2s ease;
-                    color: #374151;
-                }
-
-                .social-btn.social-dark {
-                    background: #1f2937;
-                    color: white;
-                }
-
-                .social-btn:hover {
-                    opacity: 0.85;
-                }
-
-                .social-icon {
-                    font-weight: 700;
-                    font-size: 15px;
-                }
-
+                /* Footer */
                 .login-footer {
-                    text-align: center;
-                    margin-top: 16px;
+                    margin-top: 24px;
                     font-size: 14px;
-                    color: #6b7280;
+                    color: #9ca3af;
+                    text-align: center;
                 }
 
                 .signup-link {
-                    color: #6366f1;
+                    color: #a78bfa;
                     text-decoration: none;
                     font-weight: 600;
-                    margin-left: 4px;
+                    margin-left: 5px;
+                    transition: color 0.2s;
+                    border: none;
+                    padding: 0;
+                    border-radius: 0;
                 }
 
                 .signup-link:hover {
+                    color: #c4b5fd;
+                    background: none;
                     text-decoration: underline;
                 }
 
-                /* Responsive */
-                @media (max-width: 700px) {
-                    .login-container {
+                /* ====== RIGHT PANEL — Purple Welcome ====== */
+                .login-right-panel {
+                    flex: 1;
+                    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    overflow: hidden;
+                    padding: 40px;
+                }
+
+                .right-content {
+                    position: relative;
+                    z-index: 2;
+                    text-align: center;
+                    width: 100%;
+                    max-width: 440px;
+                    color: white;
+                }
+
+                .welcome-text {
+                    margin-bottom: 40px;
+                }
+
+                .welcome-text h2 {
+                    font-size: 32px;
+                    line-height: 1.2;
+                    margin: 0 0 10px 0;
+                    font-weight: 700;
+                    letter-spacing: -0.5px;
+                }
+
+                .welcome-bold {
+                    display: inline;
+                    font-size: inherit;
+                    font-weight: inherit;
+                }
+
+                .welcome-light {
+                    display: inline;
+                    font-size: inherit;
+                    font-weight: inherit;
+                }
+
+                .welcome-text p {
+                    font-size: 16px;
+                    color: rgba(255, 255, 255, 0.9);
+                    margin: 0;
+                    font-weight: 400;
+                }
+
+                .illustration-container {
+                    width: 100%;
+                    max-width: 400px;
+                    margin: 0 auto;
+                    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+                }
+
+                .login-illustration {
+                    width: 100%;
+                    height: auto;
+                    display: block;
+                }
+
+                /* Purple decorative blob */
+                .purple-blob {
+                    position: absolute;
+                    top: -20%;
+                    right: -20%;
+                    width: 500px;
+                    height: 500px;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+                    pointer-events: none;
+                }
+
+                /* ====== RESPONSIVE ====== */
+                @media (max-width: 900px) {
+                    .login-card {
                         flex-direction: column;
-                        max-width: 360px;
+                        max-width: 450px;
+                        min-height: auto;
                     }
 
                     .login-left-panel {
                         width: 100%;
-                        padding: 24px;
-                        min-height: 140px;
-                    }
-
-                    .left-text h2 {
-                        font-size: 15px;
+                        padding: 32px;
+                        border-right: none;
                     }
 
                     .login-right-panel {
-                        padding: 24px 20px;
-                    }
-                }
-
-                @media (max-height: 600px) {
-                    .login-page {
-                        padding: 8px;
-                    }
-                    
-                    .login-left-panel {
-                        padding: 20px;
-                    }
-                    
-                    .login-right-panel {
-                        padding: 20px 32px;
-                    }
-                    
-                    .form-header {
-                        margin-bottom: 14px;
-                    }
-                    
-                    .login-form .input-group {
-                        margin-bottom: 10px;
-                    }
-                    
-                    .divider {
-                        margin: 12px 0;
-                    }
-                    
-                    .login-footer {
-                        margin-top: 12px;
+                        display: none;
                     }
                 }
             `}</style>
