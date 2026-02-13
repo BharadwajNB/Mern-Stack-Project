@@ -51,20 +51,20 @@
 
 /* Dark Theme */
 [data-theme="dark"] {
-    --bg-body: #0f172a;
-    --bg-card: #1e293b;
-    --bg-elevated: #334155;
-    --bg-subtle: #475569;
+    --bg-body: #020617;        /* Slate 950 - Darker background for depth */
+    --bg-card: #1e293b;        /* Slate 800 - Standard card background */
+    --bg-elevated: #334155;    /* Slate 700 - Slightly lighter for elevated elements */
+    --bg-subtle: #475569;      /* Slate 600 - For subtle backgrounds */
 
-    --text-main: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
+    --text-main: #f8fafc;      /* Slate 50 - Brighter text */
+    --text-secondary: #cbd5e1; /* Slate 300 - Readable secondary text */
+    --text-muted: #94a3b8;     /* Slate 400 - Muted text */
 
-    --border-color: #334155;
-    --border-hover: #475569;
+    --border-color: #475569;   /* Slate 600 - MUCH lighter border for visibility */
+    --border-hover: #64748b;   /* Slate 500 - Even lighter on hover */
 
-    --accent-light: #431407;
-    --mint-light: #064e3b;
+    --accent-light: #7c2d12;   /* Darker orange background for accents */
+    --mint-light: #064e3b;     /* Darker green background */
 }
 
 /* ========================================
