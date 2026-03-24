@@ -29,7 +29,7 @@ const Navbar = () => {
                 <div className="nav-content">
                     <Link to="/" className="logo-link">
                         <div className="logo-box">
-                            <img src="/servio-logo.svg" alt="SERVIO Logo" className="logo-img" />
+                            <img src="/servio-logo.png" alt="SERVIO Logo" className="logo-img" />
                         </div>
                         <div className="logo-text">
                             <span className="logo-name">SERVIO</span>
@@ -126,12 +126,13 @@ const Navbar = () => {
                     align-items: center;
                     justify-content: center;
                     overflow: hidden;
+                    flex-shrink: 0;
                 }
 
                 .logo-img {
                     width: 100%;
                     height: 100%;
-                    object-fit: cover;
+                    object-fit: contain;
                     border-radius: 12px;
                 }
 
