@@ -1,43 +1,25 @@
 const Complaint = require('../models/Complaint');
-const { uploadToCloudinary, deleteFromCloudinary } = require('../config/cloudinary');
+const path = require('path');
+const fs = require('fs');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
 // @access  Private (Student)
 const createComplaint = async (req, res) => {
     try {
-        const { title, description, category, priority, isAnonymous } = req.body;
+        const { title, description, category, priority } = req.body;
 
         if (!title || !description || !category) {
             return res.status(400).json({ message: 'Please fill all required fields' });
         }
 
-        // Handle file uploads
-        let attachments = [];
-        if (req.files && req.files.length > 0) {
-            for (const file of req.files) {
-                const result = await uploadToCloudinary(file.buffer);
-                attachments.push({
-                    filename: file.originalname,
-                    url: result.secure_url,
-                    publicId: result.public_id
-                });
-            }
-        }
-
         const complaint = await Complaint.create({
-            student: req.user.id,
+            createdBy: req.user.id,
             title,
             description,
             category,
             priority: priority || 'Medium',
-            isAnonymous: isAnonymous === 'true' || isAnonymous === true,
-            attachments,
-            history: [{
-                action: 'Created',
-                by: req.user.id,
-                remark: 'Complaint filed'
-            }]
+            fileUrl: req.file ? `/uploads/${req.file.filename}` : null
         });
 
         res.status(201).json(complaint);
@@ -47,42 +29,15 @@ const createComplaint = async (req, res) => {
     }
 };
 
-// @desc    Get all complaints (Role based filtering)
+// @desc    Get user complaints
 // @route   GET /api/complaints
 // @access  Private
 const getComplaints = async (req, res) => {
     try {
-        let complaints;
-        const populateOptions = [
-            { path: 'assignedTo', select: 'name email' }
-        ];
+        const complaints = await Complaint.find({ createdBy: req.user.id })
+            .sort({ createdAt: -1 });
 
-        if (req.user.role === 'student') {
-            complaints = await Complaint.find({ student: req.user.id })
-                .populate(populateOptions)
-                .sort({ createdAt: -1 });
-        } else if (req.user.role === 'faculty') {
-            // Faculty sees complaints in their category or assigned to them
-            complaints = await Complaint.find({})
-                .populate([...populateOptions, { path: 'student', select: 'name email department' }])
-                .sort({ createdAt: -1 });
-        } else {
-            // Admin sees all
-            complaints = await Complaint.find({})
-                .populate([...populateOptions, { path: 'student', select: 'name email department' }])
-                .sort({ createdAt: -1 });
-        }
-
-        // Hide student info for anonymous complaints (except for the student themselves)
-        const processed = complaints.map(c => {
-            const obj = c.toObject();
-            if (obj.isAnonymous && req.user.role !== 'student') {
-                obj.student = { name: 'Anonymous', email: 'hidden' };
-            }
-            return obj;
-        });
-
-        res.status(200).json(processed);
+        res.status(200).json(complaints);
     } catch (error) {
         console.error('Get complaints error:', error);
         res.status(500).json({ message: 'Server error' });
@@ -95,129 +50,51 @@ const getComplaints = async (req, res) => {
 const getComplaintById = async (req, res) => {
     try {
         const complaint = await Complaint.findById(req.params.id)
-            .populate('student', 'name email')
-            .populate('assignedTo', 'name email')
-            .populate('history.by', 'name');
+            .populate('createdBy', 'name email');
 
         if (!complaint) {
             return res.status(404).json({ message: 'Complaint not found' });
         }
 
-        // Access Control
-        if (req.user.role === 'student' && complaint.student._id.toString() !== req.user.id) {
+        // Access Control: Admin or Owner only
+        if (req.user.role !== 'admin' && complaint.createdBy._id.toString() !== req.user.id) {
             return res.status(401).json({ message: 'Not authorized' });
         }
 
-        const obj = complaint.toObject();
-        // Hide student info for anonymous complaints (except for the student themselves)
-        if (obj.isAnonymous && req.user.role !== 'student') {
-            obj.student = { name: 'Anonymous', email: 'hidden' };
-        }
-
-        res.status(200).json(obj);
+        res.status(200).json(complaint);
     } catch (error) {
         console.error('Get complaint by id error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
 
-// @desc    Update complaint status
-// @route   PUT /api/complaints/:id
-// @access  Private (Faculty/Admin)
-const updateComplaintStatus = async (req, res) => {
+// @desc    Download file
+// @route   GET /api/complaints/download/:filename
+// @access  Private (Admin or Owner only)
+const downloadFile = async (req, res) => {
     try {
-        const { status, remark } = req.body;
+        const { filename } = req.params;
+        const filePath = path.join(__dirname, '../uploads', filename);
 
-        const complaint = await Complaint.findById(req.params.id);
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ message: 'File not found' });
+        }
 
+        // Find associated complaint to check permissions
+        const complaint = await Complaint.findOne({ fileUrl: `/uploads/${filename}` });
+        
         if (!complaint) {
-            return res.status(404).json({ message: 'Complaint not found' });
+            return res.status(404).json({ message: 'File record not found' });
         }
 
-        if (req.user.role === 'student') {
-            return res.status(403).json({ message: 'Students cannot update status' });
-        }
-
-        complaint.status = status || complaint.status;
-        if (req.user.role === 'faculty' && !complaint.assignedTo) {
-            complaint.assignedTo = req.user.id;
-        }
-
-        complaint.history.push({
-            action: `Status changed to ${status}`,
-            by: req.user.id,
-            remark: remark || ''
-        });
-
-        await complaint.save();
-
-        const updated = await Complaint.findById(req.params.id)
-            .populate('student', 'name email')
-            .populate('assignedTo', 'name email');
-
-        const obj = updated.toObject();
-        // Hide student info for anonymous complaints
-        if (obj.isAnonymous && req.user.role !== 'student') {
-            obj.student = { name: 'Anonymous', email: 'hidden' };
-        }
-
-        res.status(200).json(obj);
-    } catch (error) {
-        console.error('Update complaint status error:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
-
-
-
-// @desc    Rate a resolved complaint
-// @route   POST /api/complaints/:id/rate
-// @access  Private (Student only, own complaint)
-const rateComplaint = async (req, res) => {
-    try {
-        const { score, feedback } = req.body;
-
-        if (!score || score < 1 || score > 5) {
-            return res.status(400).json({ message: 'Rating score must be between 1 and 5' });
-        }
-
-        const complaint = await Complaint.findById(req.params.id);
-
-        if (!complaint) {
-            return res.status(404).json({ message: 'Complaint not found' });
-        }
-
-        // Only the student who filed can rate
-        if (complaint.student.toString() !== req.user.id) {
+        // Permission check: Owner or Admin
+        if (req.user.role !== 'admin' && complaint.createdBy.toString() !== req.user.id) {
             return res.status(401).json({ message: 'Not authorized' });
         }
 
-        // Only resolved complaints can be rated
-        if (complaint.status !== 'Resolved') {
-            return res.status(400).json({ message: 'Only resolved complaints can be rated' });
-        }
-
-        // Prevent re-rating
-        if (complaint.rating && complaint.rating.score) {
-            return res.status(400).json({ message: 'Complaint already rated' });
-        }
-
-        complaint.rating = {
-            score,
-            feedback: feedback || '',
-            ratedAt: new Date()
-        };
-
-        complaint.history.push({
-            action: `Rated ${score}/5 stars`,
-            by: req.user.id,
-            remark: feedback || ''
-        });
-
-        await complaint.save();
-        res.status(200).json(complaint);
+        res.download(filePath);
     } catch (error) {
-        console.error('Rate complaint error:', error);
+        console.error('Download error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -226,6 +103,5 @@ module.exports = {
     createComplaint,
     getComplaints,
     getComplaintById,
-    updateComplaintStatus,
-    rateComplaint
+    downloadFile
 };

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedUser = JSON.parse(sessionStorage.getItem('user'));
+        const storedUser = JSON.parse(localStorage.getItem('user'));
         if (storedUser) {
             setUser(storedUser);
         }
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         const response = await api.post('/auth/login', { email, password });
         if (response.data) {
-            sessionStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('user', JSON.stringify(response.data));
             setUser(response.data);
         }
         return response.data;
@@ -29,14 +29,14 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         const response = await api.post('/auth/register', userData);
         if (response.data) {
-            sessionStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('user', JSON.stringify(response.data));
             setUser(response.data);
         }
         return response.data;
     };
 
     const logout = () => {
-        sessionStorage.removeItem('user');
+        localStorage.removeItem('user');
         setUser(null);
     };
 

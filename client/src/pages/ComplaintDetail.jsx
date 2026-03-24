@@ -60,19 +60,24 @@ const ComplaintDetail = () => {
 
     const getStatusStyles = (status) => {
         switch(status) {
-            case 'Pending': return 'bg-[#fef3c7] text-[#92400e]';
-            case 'Resolved': return 'bg-[#d1fae5] text-[#065f46]';
-            case 'In Progress': return 'bg-[#dbeafe] text-[#1d4ed8]';
-            case 'Rejected': return 'bg-[#fee2e2] text-[#991b1b]';
+            case 'Pending': return 'bg-amber-100 text-amber-800';
+            case 'Resolved': return 'bg-emerald-100 text-emerald-800';
+            case 'In Progress': return 'bg-blue-100 text-blue-800';
             default: return 'bg-gray-100 text-gray-600';
         }
+    };
+
+    const handleDownload = () => {
+        if (!complaint?.fileUrl) return;
+        const filename = complaint.fileUrl.split('/').pop();
+        window.open(`http://localhost:5000/api/complaints/download/${filename}`, '_blank');
     };
 
     if (loading) return (
         <div className="dashboard-layout">
             <Sidebar />
             <main className="main-content flex items-center justify-center">
-                <div className="text-[var(--text-muted)] animate-pulse">Loading complaint details...</div>
+                <div className="text-[var(--text-muted)] animate-pulse">Loading grievance details...</div>
             </main>
         </div>
     );
@@ -86,8 +91,6 @@ const ComplaintDetail = () => {
             </main>
         </div>
     );
-
-    const canRate = user?.role === 'student' && complaint.status === 'Resolved' && !complaint.rating?.score;
 
     return (
         <div className="dashboard-layout">
@@ -116,24 +119,17 @@ const ComplaintDetail = () => {
                                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-gray-100 text-gray-600">
                                         {complaint.category}
                                     </span>
-                                    {complaint.priority === 'Urgent' && (
-                                        <span className="bg-red-50 text-red-600 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">Urgent</span>
-                                    )}
                                 </div>
                                 <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">{complaint.title}</h2>
                                 
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8 py-6 border-y border-[var(--border-subtle)]">
+                                <div className="grid grid-cols-2 gap-6 mb-8 py-6 border-y border-[var(--border-subtle)]">
                                     <div>
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Filed Date</p>
                                         <p className="text-xs font-semibold text-[var(--text-secondary)]">{new Date(complaint.createdAt).toLocaleDateString()}</p>
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Filed By</p>
-                                        <p className="text-xs font-semibold text-[var(--text-secondary)]">{complaint.isAnonymous ? 'Student (Anonymous)' : complaint.student?.name}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Assigned To</p>
-                                        <p className="text-xs font-semibold text-[var(--text-secondary)]">{complaint.assignedTo?.name || 'Unassigned'}</p>
+                                        <p className="text-xs font-semibold text-[var(--text-secondary)]">{complaint.createdBy?.name || 'Anonymous'}</p>
                                     </div>
                                 </div>
 
@@ -142,45 +138,27 @@ const ComplaintDetail = () => {
                                     <p className="text-sm leading-relaxed text-[var(--text-secondary)] whitespace-pre-wrap">{complaint.description}</p>
                                 </div>
 
-                                {complaint.attachments?.length > 0 && (
+                                {complaint.fileUrl && (
                                     <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
-                                        <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Supporting Evidence</h4>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {complaint.attachments.map((file, i) => (
-                                                <a key={i} href={file.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border border-[var(--border-subtle)] rounded-lg hover:border-[var(--primary)] hover:bg-blue-50/20 transition-all group">
-                                                    <span className="material-symbols-outlined text-gray-400 group-hover:text-[var(--primary)]">description</span>
-                                                    <span className="text-xs font-medium text-[var(--text-secondary)] truncate">{file.filename}</span>
-                                                </a>
-                                            ))}
-                                        </div>
+                                        <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Attachment</h4>
+                                        <button 
+                                            onClick={handleDownload}
+                                            className="flex items-center gap-3 p-4 border border-[var(--border-subtle)] rounded-lg hover:border-[var(--primary)] hover:bg-blue-50/20 transition-all group w-full md:w-auto"
+                                        >
+                                            <span className="material-symbols-outlined text-[var(--primary)]">download</span>
+                                            <div className="text-left">
+                                                <span className="block text-xs font-bold text-[var(--text-primary)]">Download Evidence</span>
+                                                <span className="block text-[10px] text-[var(--text-muted)] uppercase tracking-wider">{complaint.fileUrl.split('/').pop()}</span>
+                                            </div>
+                                        </button>
                                     </div>
                                 )}
-                            </div>
-
-                            {/* Timeline Card */}
-                            <div className="bg-white border border-[var(--border-subtle)] rounded-[var(--radius-lg)] p-8 shadow-sm">
-                                <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-8">Resolution Timeline</h4>
-                                <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1px] before:bg-zinc-100">
-                                    {complaint.history?.map((item, i) => (
-                                        <div key={i} className="relative pl-10">
-                                            <div className="absolute left-0 top-1 w-[24px] h-[24px] bg-white border border-[var(--border-subtle)] rounded-full flex items-center justify-center z-10">
-                                                <div className="w-1.5 h-1.5 bg-[var(--primary)] rounded-full"></div>
-                                            </div>
-                                            <div className="flex justify-between items-start mb-1">
-                                                <p className="text-xs font-bold text-[var(--text-primary)]">{item.action}</p>
-                                                <time className="text-[10px] font-medium text-[var(--text-muted)]">{new Date(item.date).toLocaleDateString()}</time>
-                                            </div>
-                                            <p className="text-[10px] text-[var(--text-muted)] font-medium mb-1">By {item.by?.name}</p>
-                                            {item.remark && <p className="text-xs text-[var(--text-secondary)] bg-gray-50 p-3 rounded-lg border border-[var(--border-subtle)] mt-2 italic">“{item.remark}”</p>}
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
                         </div>
 
                         {/* Sidebar Actions */}
                         <div className="lg:col-span-1 space-y-6">
-                            {(user?.role === 'faculty' || user?.role === 'admin') && (
+                            {user?.role === 'admin' && (
                                 <div className="bg-white border border-[var(--border-subtle)] rounded-[var(--radius-lg)] p-6 shadow-sm">
                                     <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-6">Manage Case</h4>
                                     
@@ -198,17 +176,8 @@ const ComplaintDetail = () => {
                                                 onChange={(e) => setStatusUpdate(prev => ({...prev, status: e.target.value}))}
                                                 className="w-full px-4 py-2 bg-[var(--bg-app)] border border-[var(--border-subtle)] rounded-lg text-sm outline-none focus:border-[var(--primary)]"
                                             >
-                                                {['Pending', 'In Progress', 'Resolved', 'Rejected'].map(s => <option key={s} value={s}>{s}</option>)}
+                                                {['Pending', 'In Progress', 'Resolved'].map(s => <option key={s} value={s}>{s}</option>)}
                                             </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2">Remark / Resolution Note</label>
-                                            <textarea 
-                                                value={statusUpdate.remark} 
-                                                onChange={(e) => setStatusUpdate(prev => ({...prev, remark: e.target.value}))}
-                                                className="w-full px-4 py-2 bg-[var(--bg-app)] border border-[var(--border-subtle)] rounded-lg text-sm outline-none focus:border-[var(--primary)] min-h-[100px]"
-                                                placeholder="Enter any actions taken..."
-                                            />
                                         </div>
                                         <button 
                                             type="submit" disabled={updating}
@@ -220,40 +189,19 @@ const ComplaintDetail = () => {
                                 </div>
                             )}
 
-                            {canRate && (
-                                <div className="bg-[var(--primary)] text-white p-6 rounded-[var(--radius-lg)] shadow-lg shadow-blue-500/20 text-center">
-                                    <h4 className="text-sm font-bold mb-2">Issue Resolved?</h4>
-                                    <p className="text-[11px] opacity-80 mb-6">Your feedback helps us improve our service standards.</p>
-                                    <button 
-                                        onClick={() => setShowRating(true)}
-                                        className="w-full bg-white text-[var(--primary)] py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-blue-50 transition-colors shadow-sm"
-                                    >
-                                        Rate Resolution
-                                    </button>
-                                </div>
-                            )}
-
-                            {complaint.rating?.score && (
-                                <div className="bg-zinc-900 text-white p-6 rounded-[var(--radius-lg)]">
-                                    <h4 className="text-[11px] font-bold uppercase tracking-widest opacity-60 mb-4">Student Rating</h4>
-                                    <div className="flex gap-1 mb-3">
-                                        {[1, 2, 3, 4, 5].map(s => (
-                                            <span key={s} className={`material-symbols-outlined text-[16px] ${s <= complaint.rating.score ? 'text-amber-400' : 'text-zinc-700'}`}>star</span>
-                                        ))}
-                                    </div>
-                                    {complaint.rating.feedback && <p className="text-xs text-zinc-400 italic font-medium leading-relaxed">“{complaint.rating.feedback}”</p>}
-                                </div>
-                            )}
+                            <div className="bg-gray-50 border border-dashed border-[var(--border-subtle)] p-6 rounded-[var(--radius-lg)] text-center">
+                                <h4 className="text-xs font-bold text-[var(--text-muted)] mb-2 uppercase tracking-widest">Case Priority</h4>
+                                <span className={`inline-block px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                    complaint.priority === 'High' ? 'text-red-700 bg-red-100' : 
+                                    complaint.priority === 'Medium' ? 'text-amber-700 bg-amber-100' : 'text-blue-700 bg-blue-100'
+                                }`}>
+                                    {complaint.priority}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
-
-            <RatingModal 
-                isOpen={showRating} 
-                onClose={() => setShowRating(false)} 
-                onSubmit={handleRating} 
-            />
         </div>
     );
 };

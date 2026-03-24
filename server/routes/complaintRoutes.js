@@ -4,24 +4,32 @@ const {
     createComplaint,
     getComplaints,
     getComplaintById,
-    updateComplaintStatus,
-    rateComplaint
+    downloadFile
 } = require('../controllers/complaintController');
+const {
+    getAllComplaints,
+    updateComplaintStatus
+} = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { upload } = require('../config/cloudinary');
+const upload = require('../config/multerConfig');
 
-// Complaint CRUD routes
+// --- Standard Student/Private Routes ---
+
 router.route('/')
-    .post(protect, authorize('student'), upload.array('attachments', 5), createComplaint)
+    .post(protect, authorize('student'), upload.single('file'), createComplaint)
     .get(protect, getComplaints);
 
+router.get('/download/:filename', protect, downloadFile);
+
 router.route('/:id')
-    .get(protect, getComplaintById)
-    .put(protect, authorize('faculty', 'admin'), updateComplaintStatus);
+    .get(protect, getComplaintById);
 
+// --- Admin Only Routes ---
 
+router.route('/admin/all')
+    .get(protect, authorize('admin'), getAllComplaints);
 
-// Rating route (student only)
-router.post('/:id/rate', protect, authorize('student'), rateComplaint);
+router.route('/admin/:id')
+    .put(protect, authorize('admin'), updateComplaintStatus);
 
 module.exports = router;

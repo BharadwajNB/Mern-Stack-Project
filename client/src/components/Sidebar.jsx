@@ -5,11 +5,17 @@ const Sidebar = () => {
     const { user, logout } = useAuth();
     const location = useLocation();
 
-    const menuItems = [
-        { name: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
-        { name: 'File Complaint', path: '/complaint/new', icon: 'add_circle' },
-        { name: 'Profile', path: '/profile', icon: 'person' },
-    ];
+    const menuItems = user?.role === 'admin' 
+        ? [
+            { name: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
+            { name: 'Analytics', path: '/analytics', icon: 'monitoring' },
+            { name: 'Profiles', path: '/profiles', icon: 'group' },
+          ]
+        : [
+            { name: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
+            { name: 'File Complaint', path: '/complaint/new', icon: 'add_circle' },
+            { name: 'My Profile', path: '/profile', icon: 'person' },
+          ];
 
     return (
         <aside className="fixed left-0 top-0 h-screen w-[220px] bg-[var(--bg-sidebar)] flex flex-col justify-between py-8 z-50">

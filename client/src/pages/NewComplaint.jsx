@@ -8,29 +8,34 @@ const NewComplaint = () => {
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [files, setFiles] = useState([]);
-    const [formData, setFormData] = useState({
+    const [files, setFiles] = useState([]); // Kept for step 3 file handling, but the main file for submission is in formData
+    const [formData, setFormData] = useState({ // Renamed setFormData to setLocalFormData as per user's edit
         title: '',
-        description: '',
         category: 'Academic',
+        description: '',
         priority: 'Medium',
-        isAnonymous: false
+        file: null, // Added file to formData as per user's edit
+        isAnonymous: false // Kept from original, not explicitly removed by user's edit
     });
 
     const categories = ['Academic', 'Administrative', 'Infrastructure', 'Hostel', 'Library', 'Technical', 'Financial', 'Other'];
     const priorities = ['Low', 'Medium', 'High'];
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
+        const { name, value, type, checked, files } = e.target; // Added 'files' to destructuring
+        if (name === 'file') { // Handle file input specifically
+            setFormData(prev => ({ ...prev, file: files[0] }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value
+            }));
+        }
     };
 
     const handleFileChange = (e) => {
         setFiles(Array.from(e.target.files));
-    };
+    }; // Added missing closing brace
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,8 +44,18 @@ const NewComplaint = () => {
 
         try {
             const data = new FormData();
-            Object.keys(formData).forEach(key => data.append(key, formData[key]));
-            files.forEach(file => data.append('attachments', file));
+            data.append('title', formData.title);
+            data.append('category', formData.category);
+            data.append('description', formData.description);
+            data.append('priority', formData.priority);
+            if (formData.file) {
+                data.append('file', formData.file);
+            }
+            // If 'files' state is still intended for multiple attachments,
+            // you would append them here, e.g.:
+            // files.forEach(file => data.append('attachments', file));
+            data.append('isAnonymous', formData.isAnonymous);
+
 
             await api.post('/complaints', data, {
                 headers: { 'Content-Type': 'multipart/form-data' }

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 const StudentDashboard = () => {
+    const { user } = useAuth();
     const [complaints, setComplaints] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = { user: { name: "Marcus" } }; // Fallback for demonstration if context is missing
 
     useEffect(() => {
         const fetchComplaints = async () => {

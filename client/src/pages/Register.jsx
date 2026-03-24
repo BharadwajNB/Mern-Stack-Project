@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -7,14 +7,19 @@ const Register = () => {
         name: '',
         email: '',
         password: '',
-        role: 'student',
-        department: 'General'
+        role: 'student'
     });
     const [showPassword, setShowPassword] = useState(false);
-    const { register } = useAuth();
+    const { register, user } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -105,30 +110,14 @@ const Register = () => {
                                 </div>
                             </div>
 
-                            <div className="form-row">
-                                <div className="input-group">
-                                    <select
-                                        name="department"
-                                        value={formData.department}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="General">General</option>
-                                        <option value="Computer Science">Computer Science</option>
-                                        <option value="Electrical">Electrical</option>
-                                        <option value="Mechanical">Mechanical</option>
-                                    </select>
-                                </div>
-                                <div className="input-group">
-                                    <select
-                                        name="role"
-                                        value={formData.role}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="student">Student</option>
-                                        <option value="faculty">Faculty</option>
-                                        <option value="admin">Admin</option>
-                                    </select>
-                                </div>
+                            <div className="input-group">
+                                <select
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleChange}
+                                >
+                                    <option value="student">Student</option>
+                                </select>
                             </div>
 
                             <button type="submit" className="submit-btn" disabled={loading}>

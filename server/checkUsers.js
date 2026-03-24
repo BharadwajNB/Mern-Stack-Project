@@ -1,35 +1,19 @@
-console.log('Starting script...');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-let User;
-try {
-    User = require('./models/User');
-} catch (e) {
-    console.error('Error loading User model:', e);
-    process.exit(1);
-}
+const User = require('./models/User');
+const path = require('path');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const checkUsers = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected');
-
-        const users = await User.find({});
-
-        if (users.length > 0) {
-            console.log('Existing Users:');
-            users.forEach(user => {
-                console.log(`- Email: ${user.email}, Role: ${user.role}, Name: ${user.name}`);
-            });
-        } else {
-            console.log('No users found in the database.');
-        }
-
-        mongoose.connection.close();
-    } catch (error) {
-        console.error('Error:', error);
+        const users = await User.find({}, 'name email role');
+        console.log('Registered Users:');
+        console.table(users.map(u => ({ name: u.name, email: u.email, role: u.role })));
+        process.exit();
+    } catch (err) {
+        console.error(err);
         process.exit(1);
     }
 };

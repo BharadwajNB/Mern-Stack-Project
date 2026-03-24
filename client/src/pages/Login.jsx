@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -6,10 +6,16 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const { login } = useAuth();
+    const { login, user } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,7 +53,7 @@ const Login = () => {
                             <div className="input-group">
                                 <input
                                     type="email"
-                                    placeholder="Username"
+                                    placeholder="Email Address"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
