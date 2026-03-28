@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SERVIO | New Complaint</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    :root {
+        --warm-black: #1c1917;
+        --off-white: #faf6f1;
+        --primary-amber: #b45309;
+        --stone-text: #78716c;
+        --stone-muted: #a8a29e;
+        --stone-border: #e7e0d8;
+        --hairline: #f5f0eb;
+    }
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        vertical-align: middle;
+    }
+    body {
+        background-color: var(--off-white);
+        color: var(--warm-black);
+        -webkit-font-smoothing: antialiased;
+        font-family: 'DM Sans', sans-serif;
+    }
+    .compact-line { line-height: 1.15; }
+    .sidebar-link {
+        @apply text-[#a8a29e] hover:text-[#faf6f1] px-[24px] py-3 transition-colors flex items-center gap-3.5;
+    }
+    .sidebar-link-active {
+        @apply text-[#faf6f1] bg-[rgba(180,83,9,0.08)] border-l-[4px] border-[#b45309] px-5 py-3 transition-all flex items-center gap-3.5;
+    }
+    .form-label {
+        @apply block text-[10px] font-bold uppercase tracking-[0.08em] text-[#a8a29e] mb-2;
+    }
+    .form-input {
+        @apply w-full px-4 py-3 bg-[#f5f0eb] border border-[#e7e0d8] rounded-[12px] text-[14px] text-[#1c1917] placeholder:text-[#a8a29e] outline-none transition-all;
+    }
+    .form-input:focus {
+        border-color: #b45309;
+        box-shadow: 0 0 0 3px rgba(180,83,9,0.08);
+    }
+</style>
+</head>
+<body class="font-sans overflow-x-hidden">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="w-[220px] h-screen fixed left-0 top-0 flex flex-col bg-[#1c1917] py-8 px-0 justify-between z-50 overflow-hidden">
+    <div class="flex flex-col">
+        <div class="px-6 mb-8">
+            <h1 class="text-[18px] font-extrabold text-[#faf6f1] leading-none tracking-[-0.03em]">SERVIO</h1>
+            <p class="text-[10px] uppercase tracking-[0.1em] text-[#57534e] mt-1.5 font-normal">University Grievance Portal</p>
+        </div>
+        <nav class="flex flex-col gap-0.5">
+            <a class="sidebar-link" href="screen_dashboard.html">
+                <span class="material-symbols-outlined text-[18px]">dashboard</span>
+                <span class="text-[14px] font-medium">Dashboard</span>
+            </a>
+            <a class="sidebar-link-active" href="screen_new_complaint.html">
+                <span class="material-symbols-outlined text-[18px] text-[#faf6f1]">edit_note</span>
+                <span class="text-[14px] font-medium">New Complaint</span>
+            </a>
+            <a class="sidebar-link" href="screen_complaint_history.html">
+                <span class="material-symbols-outlined text-[18px]">history</span>
+                <span class="text-[14px] font-medium">History</span>
+            </a>
+            <a class="sidebar-link" href="#">
+                <span class="material-symbols-outlined text-[18px]">school</span>
+                <span class="text-[14px] font-medium">Results</span>
+            </a>
+            <a class="sidebar-link" href="#">
+                <span class="material-symbols-outlined text-[18px]">event_available</span>
+                <span class="text-[14px] font-medium">Attendance</span>
+            </a>
+            <a class="sidebar-link" href="#">
+                <span class="material-symbols-outlined text-[18px]">notifications</span>
+                <span class="text-[14px] font-medium">Notifications</span>
+            </a>
+            <a class="sidebar-link" href="#">
+                <span class="material-symbols-outlined text-[18px]">help</span>
+                <span class="text-[14px] font-medium">Help</span>
+            </a>
+        </nav>
+    </div>
+    <div class="flex flex-col gap-4 px-6 mb-6">
+        <a class="sidebar-link !px-0" href="#">
+            <span class="material-symbols-outlined text-[18px]">settings</span>
+            <span class="text-xs">Settings</span>
+        </a>
+        <div class="flex items-center gap-3 pt-4 border-t border-[#292524]">
+            <div class="w-8 h-8 rounded-full bg-[#b45309] flex items-center justify-center text-[11px] font-bold text-white">MR</div>
+            <div>
+                <p class="text-[12px] font-semibold text-[#faf6f1] leading-tight">Marcus Rivera</p>
+                <p class="text-[10px] text-[#57534e] leading-tight">CS • Semester 6</p>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="ml-[220px] min-h-screen bg-[#faf6f1]">
+
+    <!-- ── TOP HEADER ── -->
+    <header class="px-10 py-5 flex items-center justify-between border-b border-[#e7e0d8] bg-white/60 backdrop-blur-sm sticky top-0 z-40">
+        <div>
+            <div class="flex items-center gap-2 text-[11px] text-[#a8a29e] mb-1">
+                <a href="screen_dashboard.html" class="hover:text-[#b45309] transition-colors">Dashboard</a>
+                <span>›</span>
+                <span class="text-[#78716c] font-medium">New Complaint</span>
+            </div>
+            <h2 class="text-[28px] font-bold leading-tight text-[#1c1917]">New Complaint</h2>
+            <p class="text-[13px] text-[#78716c] mt-0.5">Submit a detailed grievance for review by the university administration</p>
+        </div>
+        <div class="flex items-center gap-5">
+            <button class="relative p-2 rounded-full hover:bg-[#f5f0eb] transition-colors">
+                <span class="material-symbols-outlined text-[20px] text-[#78716c]">notifications</span>
+                <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#b45309] rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-2.5 pl-4 border-l border-[#e7e0d8]">
+                <div class="w-8 h-8 rounded-full bg-[#b45309] flex items-center justify-center text-[11px] font-bold text-white">MR</div>
+                <div>
+                    <p class="text-[12px] font-semibold text-[#1c1917] leading-tight">Marcus Rivera</p>
+                    <p class="text-[10px] text-[#a8a29e] leading-tight">Student</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="px-10 py-8">
+        <div class="grid grid-cols-[1fr_340px] gap-8 items-start">
+
+            <!-- ════ FORM CARD ════ -->
+            <div class="bg-white border-[1.5px] border-[#e7e0d8] rounded-[20px] overflow-hidden">
+
+                <!-- Form header -->
+                <div class="px-8 pt-8 pb-6 border-b border-[#f5f0eb]">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-[18px] font-bold text-[#1c1917]">Complaint Information</h3>
+                            <p class="text-[12px] text-[#a8a29e] mt-1">Fill in all required fields to submit your grievance for processing.</p>
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.1em] text-[#a8a29e] bg-[#f5f0eb] px-3 py-1.5 rounded-full">Draft</span>
+                    </div>
+                </div>
+
+                <!-- Form body -->
+                <div class="px-8 py-8">
+                    <!-- ROW 1: Title -->
+                    <div class="mb-6">
+                        <label class="form-label">Complaint Title <span class="text-[#b45309]">*</span></label>
+                        <input type="text" class="form-input" placeholder="e.g., Library noise violation in Silent Zone B" value="Broken Air Conditioning in Lecture Hall 204"/>
+                    </div>
+
+                    <!-- ROW 2: Category + Department -->
+                    <div class="grid grid-cols-2 gap-5 mb-6">
+                        <div>
+                            <label class="form-label">Category <span class="text-[#b45309]">*</span></label>
+                            <div class="relative">
+                                <select class="form-input appearance-none pr-10">
+                                    <option>Infrastructure</option>
+                                    <option>Academic</option>
+                                    <option>Administrative</option>
+                                    <option>Hostel</option>
+                                    <option>Library</option>
+                                    <option>Technical</option>
+                                    <option>Financial</option>
+                                    <option>Other</option>
+                                </select>
+                                <span class="material-symbols-outlined text-[16px] text-[#a8a29e] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Department <span class="text-[#b45309]">*</span></label>
+                            <div class="relative">
+                                <select class="form-input appearance-none pr-10">
+                                    <option>Facilities Management</option>
+                                    <option>Academic Affairs</option>
+                                    <option>Student Services</option>
+                                    <option>IT Department</option>
+                                    <option>Finance Office</option>
+                                    <option>Housing & Residence</option>
+                                    <option>Library Services</option>
+                                </select>
+                                <span class="material-symbols-outlined text-[16px] text-[#a8a29e] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROW 3: Priority + Date -->
+                    <div class="grid grid-cols-2 gap-5 mb-6">
+                        <div>
+                            <label class="form-label">Priority Level <span class="text-[#b45309]">*</span></label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button class="py-2.5 rounded-[10px] text-[12px] font-semibold border border-[#e7e0d8] text-[#78716c] hover:border-[#b45309] transition-colors">Low</button>
+                                <button class="py-2.5 rounded-[10px] text-[12px] font-semibold border border-[#b45309] bg-[#b45309] text-white">Medium</button>
+                                <button class="py-2.5 rounded-[10px] text-[12px] font-semibold border border-[#e7e0d8] text-[#78716c] hover:border-[#b45309] transition-colors">High</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Date of Incident</label>
+                            <input type="text" class="form-input" value="March 26, 2026"/>
+                        </div>
+                    </div>
+
+                    <!-- ROW 4: Description -->
+                    <div class="mb-6">
+                        <label class="form-label">Detailed Description <span class="text-[#b45309]">*</span></label>
+                        <textarea class="form-input min-h-[140px] resize-none" placeholder="Describe the issue in detail, including time, location, and people involved…">The air conditioning unit in Lecture Hall 204 has been non-functional for the past two weeks. Multiple students have reported discomfort during afternoon lectures, especially during the 2:00 PM – 3:30 PM ECON302 slot. The temperature frequently exceeds 30°C, affecting concentration and overall classroom environment. Facilities was verbally informed on March 20th but no action has been taken.</textarea>
+                    </div>
+
+                    <!-- ROW 5: Attachment Upload -->
+                    <div class="mb-6">
+                        <label class="form-label">Supporting Documents</label>
+                        <div class="border-2 border-dashed border-[#e7e0d8] rounded-[16px] p-8 text-center hover:border-[#b45309]/50 hover:bg-[#faf6f1] transition-all cursor-pointer group">
+                            <span class="material-symbols-outlined text-[32px] text-[#a8a29e] mb-2 group-hover:text-[#b45309] transition-colors block">cloud_upload</span>
+                            <p class="text-[13px] font-semibold text-[#1c1917]">Click to upload or drag and drop</p>
+                            <p class="text-[11px] text-[#a8a29e] mt-1">PDF, PNG, JPG, DOCX — Max 5MB per file</p>
+                        </div>
+                        <!-- Attached file preview -->
+                        <div class="mt-3 flex items-center gap-3 bg-[#f5f0eb] px-4 py-2.5 rounded-[10px]">
+                            <span class="material-symbols-outlined text-[16px] text-[#b45309]">description</span>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[12px] font-semibold text-[#1c1917] truncate">temperature_reading_hall204.jpg</p>
+                                <p class="text-[10px] text-[#a8a29e]">248 KB</p>
+                            </div>
+                            <button class="text-[#a8a29e] hover:text-[#991b1b] transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">close</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ROW 6: Contact Method -->
+                    <div class="mb-2">
+                        <label class="form-label">Preferred Contact Method</label>
+                        <div class="flex gap-3">
+                            <label class="flex items-center gap-2 px-4 py-2.5 rounded-[10px] border border-[#b45309] bg-[rgba(180,83,9,0.04)] cursor-pointer">
+                                <input type="radio" name="contact" checked class="w-3.5 h-3.5 text-[#b45309] focus:ring-[#b45309]"/>
+                                <span class="text-[12px] font-medium text-[#1c1917]">University Email</span>
+                            </label>
+                            <label class="flex items-center gap-2 px-4 py-2.5 rounded-[10px] border border-[#e7e0d8] cursor-pointer hover:border-[#b45309]/40 transition-colors">
+                                <input type="radio" name="contact" class="w-3.5 h-3.5 text-[#b45309] focus:ring-[#b45309]"/>
+                                <span class="text-[12px] font-medium text-[#78716c]">Phone</span>
+                            </label>
+                            <label class="flex items-center gap-2 px-4 py-2.5 rounded-[10px] border border-[#e7e0d8] cursor-pointer hover:border-[#b45309]/40 transition-colors">
+                                <input type="radio" name="contact" class="w-3.5 h-3.5 text-[#b45309] focus:ring-[#b45309]"/>
+                                <span class="text-[12px] font-medium text-[#78716c]">In-Person</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form footer -->
+                <div class="px-8 py-5 border-t border-[#f5f0eb] bg-[#faf6f1]/50 flex items-center justify-between">
+                    <button class="text-[12px] font-semibold text-[#78716c] hover:text-[#1c1917] transition-colors flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        Cancel
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <button class="px-5 py-2.5 rounded-[10px] text-[12px] font-bold text-[#78716c] border border-[#e7e0d8] hover:bg-white transition-colors">
+                            Save Draft
+                        </button>
+                        <button class="px-6 py-2.5 rounded-[10px] text-[12px] font-bold text-white bg-[#b45309] hover:bg-[#92400e] active:scale-[0.98] transition-all shadow-sm">
+                            Submit Complaint
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════ AUXILIARY PANEL ════ -->
+            <div class="flex flex-col gap-5 sticky top-[100px]">
+
+                <!-- GUIDELINES -->
+                <div class="bg-[#1c1917] rounded-[16px] p-6 text-white">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-[18px] text-[#b45309]">lightbulb</span>
+                        <h4 class="text-[14px] font-bold">Complaint Guidelines</h4>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="text-[11px] leading-relaxed text-[#a8a29e]">
+                            <strong class="text-[#e7e5e4] block mb-0.5">Be Specific</strong>
+                            Include exact dates, times, locations, and names where applicable.
+                        </li>
+                        <li class="text-[11px] leading-relaxed text-[#a8a29e]">
+                            <strong class="text-[#e7e5e4] block mb-0.5">Keep it Objective</strong>
+                            Stick to facts — emotional language may delay processing.
+                        </li>
+                        <li class="text-[11px] leading-relaxed text-[#a8a29e]">
+                            <strong class="text-[#e7e5e4] block mb-0.5">Attach Evidence</strong>
+                            Photos, screenshots, or documents speed up the verification process.
+                        </li>
+                        <li class="text-[11px] leading-relaxed text-[#a8a29e]">
+                            <strong class="text-[#e7e5e4] block mb-0.5">One Issue Per Complaint</strong>
+                            File separate complaints for unrelated issues to ensure proper routing.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- RESPONSE TIME -->
+                <div class="bg-white border-[1.5px] border-[#e7e0d8] rounded-[16px] p-6 text-center">
+                    <span class="material-symbols-outlined text-[24px] text-[#b45309] mb-2 block">timer</span>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.1em] text-[#a8a29e] mb-1">Expected Response Time</p>
+                    <p class="text-[28px] font-extrabold text-[#1c1917] leading-none">~48h</p>
+                    <p class="text-[11px] text-[#78716c] mt-2 leading-relaxed">Average for <strong>Infrastructure</strong> category complaints</p>
+                    <div class="mt-3 pt-3 border-t border-[#f5f0eb] flex items-center justify-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-[#d1fae5]"></span>
+                        <span class="text-[10px] text-[#065f46] font-semibold">92% resolved within SLA</span>
+                    </div>
+                </div>
+
+                <!-- SUPPORT POLICY -->
+                <div class="bg-white border-[1.5px] border-[#e7e0d8] rounded-[16px] p-6">
+                    <h4 class="text-[14px] font-bold text-[#1c1917] mb-3">Support Policy</h4>
+                    <div class="space-y-2.5">
+                        <div class="flex items-start gap-2.5">
+                            <span class="material-symbols-outlined text-[14px] text-[#b45309] mt-0.5">check_circle</span>
+                            <p class="text-[11px] text-[#78716c] leading-relaxed">All complaints are reviewed within 24 hours of submission.</p>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="material-symbols-outlined text-[14px] text-[#b45309] mt-0.5">check_circle</span>
+                            <p class="text-[11px] text-[#78716c] leading-relaxed">Anonymous submissions are supported for sensitive issues.</p>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="material-symbols-outlined text-[14px] text-[#b45309] mt-0.5">check_circle</span>
+                            <p class="text-[11px] text-[#78716c] leading-relaxed">You will receive email updates at every status change.</p>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="material-symbols-outlined text-[14px] text-[#b45309] mt-0.5">check_circle</span>
+                            <p class="text-[11px] text-[#78716c] leading-relaxed">Escalation is automatic if SLA is breached.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMERGENCY -->
+                <div class="bg-[#fef3c7] border border-[#fde68a] rounded-[16px] p-5">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-[16px] text-[#92400e]">warning</span>
+                        <h4 class="text-[12px] font-bold text-[#92400e]">Urgent Issue?</h4>
+                    </div>
+                    <p class="text-[11px] text-[#78716c] leading-relaxed mb-3">For safety emergencies, harassment, or threats, contact the Student Advocate Office directly.</p>
+                    <a href="#" class="text-[11px] font-bold text-[#b45309] hover:underline flex items-center gap-1">
+                        Call (555) 012-3456 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body></html>

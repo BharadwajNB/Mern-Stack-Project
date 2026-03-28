@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 import Sidebar from '../components/Sidebar';
@@ -58,26 +58,26 @@ const ComplaintDetail = () => {
         }
     };
 
-    const getStatusStyles = (status) => {
-        switch(status) {
-            case 'Pending': return 'bg-amber-100 text-amber-800';
-            case 'Resolved': return 'bg-emerald-100 text-emerald-800';
-            case 'In Progress': return 'bg-blue-100 text-blue-800';
-            default: return 'bg-gray-100 text-gray-600';
-        }
-    };
-
     const handleDownload = () => {
         if (!complaint?.fileUrl) return;
         const filename = complaint.fileUrl.split('/').pop();
         window.open(`http://localhost:5000/api/complaints/download/${filename}`, '_blank');
     };
 
+    const getStatusPill = (status) => {
+        switch(status) {
+            case 'Pending': return 'status-pill pill-pending font-medium';
+            case 'In Progress': return 'status-pill pill-progress font-medium';
+            case 'Resolved': return 'status-pill pill-resolved font-medium';
+            default: return 'status-pill pill-pending font-medium';
+        }
+    };
+
     if (loading) return (
         <div className="dashboard-layout">
             <Sidebar />
             <main className="main-content flex items-center justify-center">
-                <div className="text-[var(--text-muted)] animate-pulse">Loading grievance details...</div>
+                <div className="geist-font text-[var(--text-muted)] text-[14px]">Loading grievance details…</div>
             </main>
         </div>
     );
@@ -86,8 +86,8 @@ const ComplaintDetail = () => {
         <div className="dashboard-layout">
             <Sidebar />
             <main className="main-content flex flex-col items-center justify-center">
-                <h3 className="text-xl font-bold text-[var(--text-primary)]">Grievance Not Found</h3>
-                <button onClick={() => navigate(-1)} className="mt-4 text-[var(--primary)] font-semibold hover:underline">Back to Dashboard</button>
+                <h3 className="heading-font text-xl font-bold text-[var(--text-primary)]">Grievance Not Found</h3>
+                <button onClick={() => navigate(-1)} className="mt-4 text-[var(--primary-orange)] font-semibold hover:underline bg-transparent border-none cursor-pointer geist-font">Back to Dashboard</button>
             </main>
         </div>
     );
@@ -95,116 +95,121 @@ const ComplaintDetail = () => {
     return (
         <div className="dashboard-layout">
             <Sidebar />
-            <main className="main-content bg-[var(--bg-app)]">
-                <div className="max-w-[1000px] mx-auto animate-fade-in">
-                    {/* Header Nav */}
-                    <div className="flex items-center justify-between mb-8">
-                        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-xs font-bold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
-                            <span className="material-symbols-outlined text-[16px]">arrow_back</span> Back to List
-                        </button>
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">
-                            Ref: #{complaint._id.slice(-8).toUpperCase()}
+            <main className="main-content !p-0">
+                <div className="px-8 py-6 min-h-screen bg-[var(--bg-color)]">
+                    {/* ── HEADER ── */}
+                    <header className="mb-6 flex flex-col gap-2">
+                        <Link to="/dashboard" className="text-[var(--primary-orange)] text-[12px] font-bold uppercase tracking-wider flex items-center gap-1 hover:opacity-80 transition-opacity no-underline">
+                            <span className="material-symbols-outlined text-[16px]">arrow_back</span> Back to Dashboard
+                        </Link>
+                        <div>
+                            <h2 className="heading-font text-[40px] font-bold leading-none text-[var(--text-primary)]">
+                                Complaint <span className="text-[var(--primary-orange)]">Details</span>
+                            </h2>
+                            <p className="geist-font text-[var(--text-secondary)] text-[14px] leading-tight mt-1 font-normal">
+                                Track progress, view updates, and communicate with the admin team.
+                            </p>
                         </div>
-                    </div>
+                    </header>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                        {/* Main Content */}
-                        <div className="lg:col-span-2 space-y-8">
-                            {/* Primary Card */}
-                            <div className="bg-white border border-[var(--border-subtle)] rounded-[var(--radius-lg)] p-8 shadow-sm">
-                                <div className="flex flex-wrap items-center gap-3 mb-4">
-                                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${getStatusStyles(complaint.status)}`}>
-                                        {complaint.status}
-                                    </span>
-                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-gray-100 text-gray-600">
-                                        {complaint.category}
-                                    </span>
-                                </div>
-                                <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">{complaint.title}</h2>
-                                
-                                <div className="grid grid-cols-2 gap-6 mb-8 py-6 border-y border-[var(--border-subtle)]">
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Filed Date</p>
-                                        <p className="text-xs font-semibold text-[var(--text-secondary)]">{new Date(complaint.createdAt).toLocaleDateString()}</p>
+                    <div className="max-w-4xl mx-auto animate-fade-in">
+                        {/* ── COMPLAINT SUMMARY CARD ── */}
+                        <div className="bg-white border-[0.5px] border-[var(--card-border)] rounded-[12px] p-5 mb-4">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <span className="geist-mono text-[12px] font-medium text-[var(--text-secondary)]">#{complaint._id.slice(-4).toUpperCase()}</span>
+                                        <span className={getStatusPill(complaint.status)}>{complaint.status}</span>
                                     </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Filed By</p>
-                                        <p className="text-xs font-semibold text-[var(--text-secondary)]">{complaint.createdBy?.name || 'Anonymous'}</p>
+                                    <h3 className="heading-font text-[22px] font-bold text-[var(--text-primary)] leading-tight mb-3">{complaint.title}</h3>
+                                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 geist-font text-[12px]">
+                                        <span className="text-[var(--text-secondary)]">Filed: <strong className="text-[var(--text-primary)]">{new Date(complaint.createdAt).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</strong></span>
+                                        <span className="text-[var(--text-secondary)]">Category: <strong className="text-[var(--text-primary)]">{complaint.category}</strong></span>
+                                        <span className="text-[var(--text-secondary)]">Priority: <strong className="text-[var(--text-primary)]">{complaint.priority}</strong></span>
+                                        <span className="text-[var(--text-secondary)]">By: <strong className="text-[var(--text-primary)]">{complaint.createdBy?.name || 'Anonymous'}</strong></span>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <div className="space-y-4">
-                                    <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Description</h4>
-                                    <p className="text-sm leading-relaxed text-[var(--text-secondary)] whitespace-pre-wrap">{complaint.description}</p>
-                                </div>
+                        {/* ── DESCRIPTION CARD ── */}
+                        <div className="bg-white border-[0.5px] border-[var(--card-border)] rounded-[12px] p-5 mb-4">
+                            <h4 className="geist-font text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mb-3">Description</h4>
+                            <p className="geist-font text-[14px] text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap">{complaint.description}</p>
+                        </div>
 
-                                {complaint.fileUrl && (
-                                    <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
-                                        <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Attachment</h4>
-                                        <button 
-                                            onClick={handleDownload}
-                                            className="flex items-center gap-3 p-4 border border-[var(--border-subtle)] rounded-lg hover:border-[var(--primary)] hover:bg-blue-50/20 transition-all group w-full md:w-auto"
-                                        >
-                                            <span className="material-symbols-outlined text-[var(--primary)]">download</span>
-                                            <div className="text-left">
-                                                <span className="block text-xs font-bold text-[var(--text-primary)]">Download Evidence</span>
-                                                <span className="block text-[10px] text-[var(--text-muted)] uppercase tracking-wider">{complaint.fileUrl.split('/').pop()}</span>
-                                            </div>
-                                        </button>
+                        {/* ── ATTACHMENT ── */}
+                        {complaint.fileUrl && (
+                            <div className="bg-white border-[0.5px] border-[var(--card-border)] rounded-[12px] p-5 mb-4">
+                                <h4 className="geist-font text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mb-3">Attachments</h4>
+                                <button onClick={handleDownload}
+                                    className="flex items-center gap-3 px-4 py-3 bg-[var(--bg-color)]/50 rounded-[10px] hover:bg-[var(--card-border)]/40 transition-colors w-full text-left border border-[var(--card-border)] cursor-pointer group">
+                                    <span className="material-symbols-outlined text-[18px] text-[var(--primary-orange)]">description</span>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="geist-font text-[12px] font-semibold text-[var(--text-primary)] truncate">{complaint.fileUrl.split('/').pop()}</p>
+                                        <p className="geist-font text-[10px] text-[var(--text-muted)]">Click to download</p>
+                                    </div>
+                                    <span className="material-symbols-outlined text-[16px] text-[var(--text-muted)] group-hover:text-[var(--primary-orange)] transition-colors">download</span>
+                                </button>
+                            </div>
+                        )}
+
+                        {/* ── ADMIN STATUS UPDATE ── */}
+                        {user?.role === 'admin' && (
+                            <div className="bg-white border-[0.5px] border-[var(--card-border)] rounded-[12px] p-5 mb-4">
+                                <h4 className="geist-font text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mb-4">Manage Case</h4>
+                                {message.text && (
+                                    <div className={`mb-4 p-3 rounded-[10px] text-xs font-medium border ${message.type === 'success' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-700 border-red-100'}`}>
+                                        {message.text}
                                     </div>
                                 )}
+                                <form onSubmit={handleStatusUpdate} className="space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="geist-font text-[13px] font-medium text-[#57534e]">Update Status</label>
+                                        <select value={statusUpdate.status}
+                                            onChange={(e) => setStatusUpdate(prev => ({...prev, status: e.target.value}))}
+                                            className="w-full bg-[var(--bg-color)]/30 border border-[var(--card-border)] rounded-xl px-4 py-3 text-[14px] geist-font focus:ring-[var(--primary-orange)] focus:border-[var(--primary-orange)] appearance-none cursor-pointer transition-all outline-none">
+                                            {['Pending', 'In Progress', 'Resolved'].map(s => <option key={s} value={s}>{s}</option>)}
+                                        </select>
+                                    </div>
+                                    <button type="submit" disabled={updating}
+                                        className="w-full bg-[var(--primary-orange)] text-white py-3 px-4 rounded-xl font-bold text-[13px] uppercase tracking-wider hover:brightness-110 disabled:opacity-50 transition-all border-none cursor-pointer">
+                                        {updating ? 'Processing…' : 'Update Status'}
+                                    </button>
+                                </form>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Sidebar Actions */}
-                        <div className="lg:col-span-1 space-y-6">
-                            {user?.role === 'admin' && (
-                                <div className="bg-white border border-[var(--border-subtle)] rounded-[var(--radius-lg)] p-6 shadow-sm">
-                                    <h4 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-6">Manage Case</h4>
-                                    
-                                    {message.text && (
-                                        <div className={`mb-4 p-3 rounded-lg text-xs font-medium border ${message.type === 'success' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-700 border-red-100'}`}>
-                                            {message.text}
-                                        </div>
-                                    )}
-
-                                    <form onSubmit={handleStatusUpdate} className="space-y-4">
-                                        <div>
-                                            <label className="block text-[10px] font-bold text-[var(--text-muted)] uppercase mb-2">Update Status</label>
-                                            <select 
-                                                value={statusUpdate.status} 
-                                                onChange={(e) => setStatusUpdate(prev => ({...prev, status: e.target.value}))}
-                                                className="w-full px-4 py-2 bg-[var(--bg-app)] border border-[var(--border-subtle)] rounded-lg text-sm outline-none focus:border-[var(--primary)]"
-                                            >
-                                                {['Pending', 'In Progress', 'Resolved'].map(s => <option key={s} value={s}>{s}</option>)}
-                                            </select>
-                                        </div>
-                                        <button 
-                                            type="submit" disabled={updating}
-                                            className="w-full bg-[var(--text-primary)] text-white py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-50 transition-all"
-                                        >
-                                            {updating ? 'Processing...' : 'Update Status'}
-                                        </button>
-                                    </form>
-                                </div>
-                            )}
-
-                            <div className="bg-gray-50 border border-dashed border-[var(--border-subtle)] p-6 rounded-[var(--radius-lg)] text-center">
-                                <h4 className="text-xs font-bold text-[var(--text-muted)] mb-2 uppercase tracking-widest">Case Priority</h4>
-                                <span className={`inline-block px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
-                                    complaint.priority === 'High' ? 'text-red-700 bg-red-100' : 
-                                    complaint.priority === 'Medium' ? 'text-amber-700 bg-amber-100' : 'text-blue-700 bg-blue-100'
-                                }`}>
-                                    {complaint.priority}
-                                </span>
+                        {/* ── RATING PROMPT ── */}
+                        {complaint.status === 'Resolved' && !complaint.rating && user?.role === 'student' && (
+                            <div className="bg-[#FDF4E7] border border-[#E6D5B8] rounded-[12px] p-5 text-center mb-4">
+                                <span className="material-symbols-outlined text-[24px] text-[var(--primary-orange)] mb-2 block">star</span>
+                                <h4 className="heading-font text-[14px] font-bold text-[var(--text-primary)] mb-1">Rate This Resolution</h4>
+                                <p className="geist-font text-[12px] text-[var(--text-secondary)] mb-3">Your feedback helps improve the grievance system.</p>
+                                <button onClick={() => setShowRating(true)}
+                                    className="bg-[var(--primary-orange)] text-white px-5 py-2.5 rounded-xl font-bold text-[13px] hover:brightness-110 transition-all border-none cursor-pointer">
+                                    Leave Rating
+                                </button>
                             </div>
-                        </div>
+                        )}
+
+                        {/* ── BACK BUTTON ── */}
+                        <button onClick={() => navigate(-1)}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-[12px] text-[13px] font-bold uppercase tracking-wider text-[#78716c] border border-[var(--card-border)] hover:bg-white transition-colors bg-transparent cursor-pointer mt-2 geist-font">
+                            <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back to Dashboard
+                        </button>
                     </div>
+
+                    {/* ── FOOTER ── */}
+                    <footer className="mt-8 text-center">
+                        <p className="geist-font text-[11px] text-[#a8a29e] uppercase tracking-[0.1em] font-medium">SERVIO System Security • Managed by University IT</p>
+                    </footer>
                 </div>
             </main>
+
+            {showRating && <RatingModal onSubmit={handleRating} onClose={() => setShowRating(false)} />}
         </div>
     );
 };
 
 export default ComplaintDetail;
-

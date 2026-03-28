@@ -4,32 +4,27 @@ const {
     createComplaint,
     getComplaints,
     getComplaintById,
+    updateComplaintStatus,
     downloadFile
 } = require('../controllers/complaintController');
-const {
-    getAllComplaints,
-    updateComplaintStatus
-} = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 const upload = require('../config/multerConfig');
 
-// --- Standard Student/Private Routes ---
+// ─── Public ──────────────────────────────────────────────────────
+// Download uses timestamp-hashed filenames (unguessable)
+router.get('/download/:filename', downloadFile);
 
+// ─── Private (Any authenticated user) ───────────────────────────
+// POST  → Student creates a complaint (with optional file upload)
+// GET   → Admin sees ALL, Student sees OWN
 router.route('/')
     .post(protect, authorize('student'), upload.single('file'), createComplaint)
     .get(protect, getComplaints);
 
-router.get('/download/:filename', protect, downloadFile);
-
+// GET   → Single complaint (Admin or Owner)
+// PUT   → Admin updates status
 router.route('/:id')
-    .get(protect, getComplaintById);
-
-// --- Admin Only Routes ---
-
-router.route('/admin/all')
-    .get(protect, authorize('admin'), getAllComplaints);
-
-router.route('/admin/:id')
+    .get(protect, getComplaintById)
     .put(protect, authorize('admin'), updateComplaintStatus);
 
 module.exports = router;

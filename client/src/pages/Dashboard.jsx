@@ -1,18 +1,14 @@
 import { useAuth } from '../context/AuthContext';
 import StudentDashboard from '../components/StudentDashboard';
 import AdminDashboard from '../components/AdminDashboard';
-import Sidebar from '../components/Sidebar';
 
 const Dashboard = () => {
     const { user } = useAuth();
 
     return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content">
-                {user?.role === 'student' && <StudentDashboard />}
-                {user?.role === 'admin' && <AdminDashboard />}
-            </main>
+        <div className="animate-fade-in h-full">
+            {user?.role === 'student' && <StudentDashboard />}
+            {user?.role === 'admin' && <AdminDashboard />}
         </div>
     );
 };

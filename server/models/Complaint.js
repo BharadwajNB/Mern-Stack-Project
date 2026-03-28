@@ -17,7 +17,7 @@ const complaintSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Academic', 'Infrastructure', 'Mess', 'Hostel', 'Library', 'Other']
+        enum: ['Academic', 'Administrative', 'Infrastructure', 'Hostel', 'Library', 'Technical', 'Financial', 'Mess', 'Other']
     },
     status: {
         type: String,
@@ -30,6 +30,9 @@ const complaintSchema = new mongoose.Schema({
         default: 'Medium'
     },
     fileUrl: {
+        type: String
+    },
+    fileName: {
         type: String
     }
 }, { timestamps: true });

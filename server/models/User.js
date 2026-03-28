@@ -19,6 +19,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['student', 'admin'],
         default: 'student'
+    },
+    studentId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    section: {
+        type: String,
+        default: 'N/A'
+    },
+    status: {
+        type: String,
+        enum: ['Active', 'Inactive'],
+        default: 'Active'
     }
 }, { timestamps: true });
 
