@@ -19,7 +19,7 @@ const createTestUser = async () => {
         console.log('MongoDB Connected');
 
         // Check if test user exists
-        const testEmail = 'test@example.com';
+        const testEmail = '24b11cs259@adityauniversity.in';
         const userExists = await User.findOne({ email: testEmail });
 
         if (userExists) {
@@ -28,10 +28,7 @@ const createTestUser = async () => {
             const user = await User.create({
                 name: 'Test Student',
                 email: testEmail,
-                password: 'password123', // Will be hashed by pre-save hook in User model if it exists, or needs manual hashing?
-                // Checking authController, it just does User.create({ password }).
-                // Checking User model would verify if pre-save hook exists.
-                // Assuming standard MERN practice: yes.
+                password: 'password123',
                 role: 'student',
                 department: 'Computer Science'
             });

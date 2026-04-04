@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-import Sidebar from '../components/Sidebar';
 
 const ComplaintHistory = () => {
     const { user } = useAuth();
@@ -98,10 +97,8 @@ const ComplaintHistory = () => {
     const uniqueCategories = [...new Set(complaints.map(c => c.category))];
 
     return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content !p-0">
-                <div className="px-8 py-6 min-h-screen bg-[var(--bg-color)]">
+        <div className="animate-fade-in">
+            <div className="min-h-screen">
 
                     {/* ═══════════════════════════════════════
                         SECTION 1: ACTIVITY LOG (TIMELINE)
@@ -325,8 +322,7 @@ const ComplaintHistory = () => {
                     <footer className="mt-10 text-center">
                         <p className="geist-font text-[11px] text-[#a8a29e] uppercase tracking-[0.1em] font-medium">SERVIO System Security • Managed by University IT</p>
                     </footer>
-                </div>
-            </main>
+            </div>
         </div>
     );
 };

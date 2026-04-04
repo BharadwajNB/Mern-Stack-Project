@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
-import Sidebar from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
 
 const NewComplaint = () => {
@@ -91,10 +90,8 @@ const NewComplaint = () => {
     };
 
     return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content !p-0">
-                <div className="px-8 py-6 min-h-screen bg-[var(--bg-color)]">
+        <div className="animate-fade-in">
+            <div className="min-h-screen">
                     {/* ── HEADER ── */}
                     <header className="mb-6 flex flex-col gap-2">
                         <Link to="/dashboard" className="text-[var(--primary-orange)] text-[12px] font-bold uppercase tracking-wider flex items-center gap-1 hover:opacity-80 transition-opacity no-underline">
@@ -411,8 +408,7 @@ const NewComplaint = () => {
                     <footer className="mt-8 text-center">
                         <p className="geist-font text-[11px] text-[#a8a29e] uppercase tracking-[0.1em] font-medium">SERVIO System Security • Managed by University IT</p>
                     </footer>
-                </div>
-            </main>
+            </div>
         </div>
     );
 };

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-import Sidebar from '../components/Sidebar';
 import RatingModal from '../components/RatingModal';
 
 const ComplaintDetail = () => {
@@ -74,29 +73,21 @@ const ComplaintDetail = () => {
     };
 
     if (loading) return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content flex items-center justify-center">
-                <div className="geist-font text-[var(--text-muted)] text-[14px]">Loading grievance details…</div>
-            </main>
+        <div className="flex items-center justify-center p-12">
+            <div className="geist-font text-[var(--text-muted)] text-[14px]">Loading grievance details…</div>
         </div>
     );
 
     if (!complaint) return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content flex flex-col items-center justify-center">
-                <h3 className="heading-font text-xl font-bold text-[var(--text-primary)]">Grievance Not Found</h3>
-                <button onClick={() => navigate(-1)} className="mt-4 text-[var(--primary-orange)] font-semibold hover:underline bg-transparent border-none cursor-pointer geist-font">Back to Dashboard</button>
-            </main>
+        <div className="flex flex-col items-center justify-center p-12">
+            <h3 className="heading-font text-xl font-bold text-[var(--text-primary)]">Grievance Not Found</h3>
+            <button onClick={() => navigate(-1)} className="mt-4 text-[var(--primary-orange)] font-semibold hover:underline bg-transparent border-none cursor-pointer geist-font">Back to Dashboard</button>
         </div>
     );
 
     return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content !p-0">
-                <div className="px-8 py-6 min-h-screen bg-[var(--bg-color)]">
+        <div className="animate-fade-in">
+            <div className="min-h-screen">
                     {/* ── HEADER ── */}
                     <header className="mb-6 flex flex-col gap-2">
                         <Link to="/dashboard" className="text-[var(--primary-orange)] text-[12px] font-bold uppercase tracking-wider flex items-center gap-1 hover:opacity-80 transition-opacity no-underline">
@@ -140,7 +131,7 @@ const ComplaintDetail = () => {
 
                         {/* ── ATTACHMENT ── */}
                         {complaint.fileUrl && (
-                            <div className="bg-white border-[0.5px] border-[var(--card-border)] rounded-[12px] p-5 mb-4">
+                            <div className="bg-white border-[0.5px] border(--card-border)] rounded-[12px] p-5 mb-4">
                                 <h4 className="geist-font text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mb-3">Attachments</h4>
                                 <button onClick={handleDownload}
                                     className="flex items-center gap-3 px-4 py-3 bg-[var(--bg-color)]/50 rounded-[10px] hover:bg-[var(--card-border)]/40 transition-colors w-full text-left border border-[var(--card-border)] cursor-pointer group">
@@ -204,9 +195,7 @@ const ComplaintDetail = () => {
                     <footer className="mt-8 text-center">
                         <p className="geist-font text-[11px] text-[#a8a29e] uppercase tracking-[0.1em] font-medium">SERVIO System Security • Managed by University IT</p>
                     </footer>
-                </div>
-            </main>
-
+            </div>
             {showRating && <RatingModal onSubmit={handleRating} onClose={() => setShowRating(false)} />}
         </div>
     );

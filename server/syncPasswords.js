@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
+const path = require('path');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const syncPasswords = async () => {
     try {
@@ -11,7 +12,7 @@ const syncPasswords = async () => {
         console.log('MongoDB Connected');
 
         const testAccounts = [
-            'test@example.com',
+            '24b11cs259@adityauniversity.in',
             'surya@adityauniversity.in'
         ];
 

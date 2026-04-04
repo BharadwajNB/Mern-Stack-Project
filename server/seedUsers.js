@@ -10,7 +10,7 @@ const seedUsers = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         
         // Ensure student exists
-        const studentEmail = 'test@example.com';
+        const studentEmail = '24b11cs259@adityauniversity.in';
         const existingStudent = await User.findOne({ email: studentEmail });
         if (!existingStudent) {
             await User.create({
@@ -19,9 +19,9 @@ const seedUsers = async () => {
                 password: 'password123',
                 role: 'student'
             });
-            console.log('Student test@example.com created.');
+            console.log('Student 24b11cs259@adityauniversity.in created.');
         } else {
-            console.log('Student test@example.com already exists.');
+            console.log('Student 24b11cs259@adityauniversity.in already exists.');
         }
 
         process.exit();

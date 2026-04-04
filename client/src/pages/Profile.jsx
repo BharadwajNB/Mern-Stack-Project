@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-import Sidebar from '../components/Sidebar';
 
 const Profile = () => {
     const { user } = useAuth();
@@ -50,10 +49,8 @@ const Profile = () => {
     };
 
     return (
-        <div className="dashboard-layout">
-            <Sidebar />
-            <main className="main-content !p-0">
-                <div className="py-6 min-h-screen bg-[var(--bg-color)]">
+        <div className="animate-fade-in">
+            <div className="py-6 min-h-screen">
                     <div className="max-w-[920px] mx-auto px-0 animate-fade-in">
                         {/* Header */}
                         <header className="mb-0">
@@ -152,8 +149,7 @@ const Profile = () => {
                             <p className="geist-font text-[11px] text-[#a8a29e] uppercase tracking-[0.1em] font-medium">SERVIO System Security • Managed by University IT</p>
                         </footer>
                     </div>
-                </div>
-            </main>
+            </div>
         </div>
     );
 };
