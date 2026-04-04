@@ -39,7 +39,8 @@ const NewComplaint = () => {
         setFormData(prev => ({ ...prev, files: prev.files.filter((_, i) => i !== idx) }));
     };
 
-    const nextStep = () => {
+    const nextStep = (e) => {
+        if (e) e.preventDefault();
         if (currentStep === 1) {
             if (!formData.title) return setError('Please enter a complaint title');
             if (!formData.category) return setError('Please select a category');
@@ -391,17 +392,15 @@ const NewComplaint = () => {
                                                 <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back
                                             </button>
                                         )}
-                                        {currentStep < 3 ? (
-                                            <button type="button" onClick={nextStep}
-                                                className="bg-[var(--primary-orange)] text-white px-8 py-2.5 rounded-xl font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:brightness-110 transition-all shadow-sm border-none cursor-pointer">
-                                                Next Step <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                                            </button>
-                                        ) : (
-                                            <button type="submit" disabled={loading}
-                                                className="bg-[var(--primary-orange)] text-white px-8 py-2.5 rounded-xl font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:brightness-110 transition-all shadow-sm border-none cursor-pointer disabled:opacity-50">
-                                                {loading ? 'Submitting…' : 'Submit Complaint'} <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                                            </button>
-                                        )}
+                                        <button 
+                                            type={currentStep < 3 ? "button" : "submit"}
+                                            onClick={currentStep < 3 ? (e) => { e.preventDefault(); nextStep(); } : undefined}
+                                            disabled={loading}
+                                            className="bg-[var(--primary-orange)] text-white px-8 py-2.5 rounded-xl font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:brightness-110 transition-all shadow-sm border-none cursor-pointer disabled:opacity-50"
+                                        >
+                                            {loading ? 'Submitting…' : currentStep < 3 ? 'Next Step' : 'Submit Complaint'}
+                                            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                        </button>
                                     </div>
                                 </div>
                             </form>

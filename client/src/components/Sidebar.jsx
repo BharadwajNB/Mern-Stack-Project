@@ -14,7 +14,6 @@ const Sidebar = () => {
           ]
         : [
             { name: 'Overview', path: '/dashboard', icon: 'dashboard', label: 'Overview' },
-            { name: 'Complaints', path: '/complaint/new', icon: 'gavel', label: 'Complaints' },
             { name: 'History', path: '/history', icon: 'history', label: 'History' },
             { name: 'Profile', path: '/profile', icon: 'person', label: 'Profile' },
           ];
