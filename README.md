@@ -1,7 +1,3 @@
-Here’s your **updated README with tech stack images cleanly integrated** (minimal, professional, no clutter). Just replace your current README with this 👇
-
----
-
 # Student Complaint System
 
 A MERN stack application designed to manage and resolve student complaints efficiently. This system allows students to submit complaints, track their status, and enables administrators to manage and address issues.
@@ -153,11 +149,3 @@ server/   → Node.js/Express backend
 Complaint Management System built with Node.js, Express, and MongoDB that allows users to submit complaints and admins to manage, update, and resolve them with real-time status tracking and structured workflows.
 
 ---
-
-If you want to level this up further, next best upgrades would be:
-
-* 🔥 Demo GIF / screenshots
-* 🌐 Live deployed link
-* 📊 Features section (bullet points)
-
-Say the word — I’ll upgrade it to a **top-tier GitHub portfolio README**.
