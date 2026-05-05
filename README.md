@@ -34,14 +34,11 @@ A MERN stack application designed to manage and resolve student complaints effic
 ### 🔐 Authentication & Tools
 
 <p align="left">
-  <img src="https://skillicons.dev/icons?i=jwt,axios" />
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" />
+  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" />
   <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" />
   <img src="https://img.shields.io/badge/Multer-FF6C37?style=for-the-badge" />
 </p>
-
-* JSON Web Token (JWT) for authentication
-* Cloudinary (for image uploads)
-* Multer (for file handling)
 
 ---
 
