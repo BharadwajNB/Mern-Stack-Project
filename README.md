@@ -1,65 +1,100 @@
+Here’s your **updated README with tech stack images cleanly integrated** (minimal, professional, no clutter). Just replace your current README with this 👇
+
+---
+
 # Student Complaint System
 
 A MERN stack application designed to manage and resolve student complaints efficiently. This system allows students to submit complaints, track their status, and enables administrators to manage and address issues.
 
-## Technology Stack
+---
 
-**Client:**
-- React (via Vite)
-- Tailwind CSS
-- React Router DOM
-- Axios
+## 🚀 Tech Stack
 
-**Server:**
-- Node.js
-- Express.js
-- MongoDB (Mongoose)
-- JSON Web Token (JWT) for authentication
-- Cloudinary (for image uploads)
-- Multer (for file handling)
+### 💻 Client
 
-## Prerequisites
+<p align="left">
+  <img src="https://skillicons.dev/icons?i=react,vite,tailwind,js" />
+</p>
 
-Ensure you have the following installed on your machine:
-- [Node.js](https://nodejs.org/) (v14 or higher recommended)
-- [MongoDB](https://www.mongodb.com/) (Local or Atlas)
+* React (via Vite)
+* Tailwind CSS
+* React Router DOM
+* Axios
 
-## Installation
+---
+
+### ⚙️ Server
+
+<p align="left">
+  <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb" />
+</p>
+
+* Node.js
+* Express.js
+* MongoDB (Mongoose)
+
+---
+
+### 🔐 Authentication & Tools
+
+<p align="left">
+  <img src="https://skillicons.dev/icons?i=jwt,axios" />
+  <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" />
+  <img src="https://img.shields.io/badge/Multer-FF6C37?style=for-the-badge" />
+</p>
+
+* JSON Web Token (JWT) for authentication
+* Cloudinary (for image uploads)
+* Multer (for file handling)
+
+---
+
+## 📦 Prerequisites
+
+Ensure you have the following installed:
+
+* Node.js (v14 or higher recommended)
+* MongoDB (Local or Atlas)
+
+---
+
+## ⚙️ Installation
 
 ### 1. Clone the Repository
+
 ```bash
 git clone <repository-url>
 cd amsd-project
 ```
 
 ### 2. Install Dependencies
-You need to install dependencies for both the root (concurrently), the server, and the client.
 
-**Root:**
+#### Root:
+
 ```bash
 npm install
 ```
 
-**Server:**
+#### Server:
+
 ```bash
 cd server
 npm install
 ```
 
-**Client:**
+#### Client:
+
 ```bash
 cd ../client
 npm install
 ```
 
-## Configuration
+---
 
-Crucial: You must set up environment variables for the server to run correctly.
+## 🔑 Configuration
 
-1.  Navigate to the `server` directory.
-2.  Create a `.env` file (if it doesn't exist) based on the example below.
+Create a `.env` file inside the **server** directory:
 
-**server/.env**
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
@@ -69,38 +104,60 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
-> **Note:** Replace the placeholder values with your actual credentials.
+Replace placeholders with your actual credentials.
 
-## Running the Application
+---
 
-To run both the server and client concurrently from the root directory:
+## ▶️ Running the Application
+
+### Run both client & server:
 
 ```bash
-# From the project root
 npm run dev
 ```
 
-- **Server:** Runs on `http://localhost:5000`
-- **Client:** Runs on `http://localhost:5173` (default Vite port)
+* Server → [http://localhost:5000](http://localhost:5000)
+* Client → [http://localhost:5173](http://localhost:5173)
 
-Alternatively, you can run them separately in two different terminals:
+---
 
-**Terminal 1 (Server):**
+### Run separately
+
+#### Terminal 1 (Server)
+
 ```bash
 cd server
-npm start
-# or for development with auto-restart (requires nodemon)
 npm run dev
 ```
 
-**Terminal 2 (Client):**
+#### Terminal 2 (Client)
+
 ```bash
 cd client
 npm run dev
 ```
 
-## Project Structure
+---
 
-- `client/`: React frontend application.
-- `server/`: Node.js/Express backend API.
-- `package.json` (Root): Scripts to run both client and server.
+## 📁 Project Structure
+
+```
+client/   → React frontend  
+server/   → Node.js/Express backend  
+```
+
+---
+
+## 📌 About
+
+Complaint Management System built with Node.js, Express, and MongoDB that allows users to submit complaints and admins to manage, update, and resolve them with real-time status tracking and structured workflows.
+
+---
+
+If you want to level this up further, next best upgrades would be:
+
+* 🔥 Demo GIF / screenshots
+* 🌐 Live deployed link
+* 📊 Features section (bullet points)
+
+Say the word — I’ll upgrade it to a **top-tier GitHub portfolio README**.
