@@ -4,7 +4,7 @@ A MERN stack application designed to manage and resolve student complaints effic
 
 ---
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 ### 💻 Client
 
@@ -19,7 +19,7 @@ A MERN stack application designed to manage and resolve student complaints effic
 
 ---
 
-### ⚙️ Server
+###  Server
 
 <p align="left">
   <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb" />
@@ -31,7 +31,7 @@ A MERN stack application designed to manage and resolve student complaints effic
 
 ---
 
-### 🔐 Authentication & Tools
+###  Authentication & Tools
 
 <p align="left">
   <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" />
@@ -42,7 +42,7 @@ A MERN stack application designed to manage and resolve student complaints effic
 
 ---
 
-## 📦 Prerequisites
+##  Prerequisites
 
 Ensure you have the following installed:
 
@@ -51,7 +51,7 @@ Ensure you have the following installed:
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
 ### 1. Clone the Repository
 
@@ -84,7 +84,7 @@ npm install
 
 ---
 
-## 🔑 Configuration
+##  Configuration
 
 Create a `.env` file inside the **server** directory:
 
@@ -101,7 +101,7 @@ Replace placeholders with your actual credentials.
 
 ---
 
-## ▶️ Running the Application
+##  Running the Application
 
 ### Run both client & server:
 
@@ -141,7 +141,7 @@ server/   → Node.js/Express backend
 
 ---
 
-## 📌 About
+##  About
 
 Complaint Management System built with Node.js, Express, and MongoDB that allows users to submit complaints and admins to manage, update, and resolve them with real-time status tracking and structured workflows.
 
